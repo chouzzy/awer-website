@@ -3,7 +3,7 @@
 
 // --- React e Frameworks ---
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation'; // Hooks para URL
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
     Box,
     Heading,
@@ -18,12 +18,17 @@ import {
     Flex,
     Badge,
     Spinner,
+    Checkbox, // 1. Importa o Checkbox
 } from "@chakra-ui/react";
 import { motion, Variants } from 'framer-motion';
 import { useAuth0 } from '@auth0/auth0-react';
 
 // --- Ícones ---
 import { PiCheckCircleFill } from "react-icons/pi";
+
+// --- Componentes Locais ---
+import { TermsModal } from '@/components/ui/TermsModal';
+
 
 // ============================================================================
 //   DADOS DOS PLANOS
@@ -120,17 +125,14 @@ export function BotrtPlans() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
-    // Hooks para ler os parâmetros da URL
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    // Função que lida com o clique no botão de assinatura
     const handleSubscription = async (priceId: string) => {
         setSelectedPlan(priceId);
         setIsLoading(true);
 
         if (!isAuthenticated) {
-            // A MUDANÇA: Passamos o 'appState' com a intenção do usuário.
             await loginWithRedirect({
                 appState: {
                     returnTo: '/tecnologia/botrt',
@@ -163,18 +165,13 @@ export function BotrtPlans() {
             setSelectedPlan(null);
         }
     };
-    
-    // A MUDANÇA: Efeito que roda na primeira carga da página para verificar a intenção do usuário
+
     useEffect(() => {
         const action = searchParams.get('action');
         const priceId = searchParams.get('priceId');
 
-        // Se o usuário está logado e a URL contém a instrução para assinar...
         if (isAuthenticated && action === 'subscribe' && priceId) {
-            console.log("Usuário autenticado, iniciando assinatura para o plano:", priceId);
-            // Limpa a URL para evitar que o fluxo seja reativado
             router.replace('/tecnologia/botrt');
-            // Inicia o processo de checkout automaticamente
             handleSubscription(priceId);
         }
     }, [isAuthenticated, searchParams, router]);
@@ -228,7 +225,7 @@ export function BotrtPlans() {
 }
 
 // ============================================================================
-//   SUB-COMPONENTE: PricingCard
+//   SUB-COMPONENTE: PricingCard (ATUALIZADO)
 // ============================================================================
 interface PricingCardProps {
     name: string;
@@ -244,6 +241,9 @@ interface PricingCardProps {
 }
 
 function PricingCard({ name, price, priceId, billingCycle, description, features, buttonText, isRecommended = false, isLoading, onSubscribe }: PricingCardProps) {
+    // 3. Estado para controlar se os termos foram aceites
+    const [termsAccepted, setTermsAccepted] = useState(false);
+
     return (
         <Flex
             p={8}
@@ -305,22 +305,41 @@ function PricingCard({ name, price, priceId, billingCycle, description, features
                 ))}
             </Flex>
 
-            <Button
-                w="100%"
-                size="lg"
-                borderRadius={'lg'}
-                color={isRecommended ? "black" : "white"}
-                bgColor={isRecommended ? "white" : "brand.500"}
-                _hover={{
-                    bgColor: 'brand.800',
-                    color: "white"
-                }}
-                onClick={onSubscribe}
-                loading={isLoading}
-                disabled={!priceId}
-            >
-                {isLoading ? 'Aguarde...' : buttonText}
-            </Button>
+            {/* A MUDANÇA: VStack para agrupar o Checkbox e o Botão */}
+            <VStack w="100%" gap={4}>
+                <Flex flexDir={'row'} alignItems={'center'} gap={2}>
+                    <Checkbox.Root
+                        size="sm"
+                        colorScheme="blue"
+                        checked={termsAccepted}
+                        onCheckedChange={(e) => setTermsAccepted(!!e.checked)}
+                        cursor={'pointer'}
+                    >
+                        <Checkbox.Control cursor={'pointer'} />
+                        <Checkbox.HiddenInput />
+
+                    </Checkbox.Root>
+                    <TermsModal />
+                </Flex>
+
+                <Button
+                    w="100%"
+                    size="lg"
+                    borderRadius={'lg'}
+                    color={isRecommended ? "black" : "white"}
+                    bgColor={isRecommended ? "white" : "brand.500"}
+                    _hover={{
+                        bgColor: 'brand.800',
+                        color: "white"
+                    }}
+                    onClick={onSubscribe}
+                    loading={isLoading}
+                    // 4. O botão agora também depende dos termos aceites
+                    disabled={!priceId || !termsAccepted || isLoading}
+                >
+                    {isLoading ? 'Aguarde...' : buttonText}
+                </Button>
+            </VStack>
         </Flex>
     );
 }
