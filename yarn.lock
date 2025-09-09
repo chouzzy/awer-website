@@ -2981,7 +2981,7 @@ __metadata:
     react-hook-form: ^7.56.2
     react-icons: ^5.5.0
     snippet: ^0.1.0
-    stripe: ^18.3.0
+    stripe: ^18.5.0
     swiper: ^11.2.8
     three: ^0.176.0
     toaster: ^0.1.2
@@ -7490,9 +7490,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stripe@npm:^18.3.0":
-  version: 18.3.0
-  resolution: "stripe@npm:18.3.0"
+"stripe@npm:^18.5.0":
+  version: 18.5.0
+  resolution: "stripe@npm:18.5.0"
   dependencies:
     qs: ^6.11.0
   peerDependencies:
@@ -7500,7 +7500,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/node":
       optional: true
-  checksum: 5e05ebd28f0f9777a3c45f3a2204060721276d434be334c39bc88a4bb85bb47afa2e62a292e69b5dc448043f7c5f341fe3e4b025d425b46190074631142316a7
+  checksum: e71699e5511fab8cb16f4911f29c0f6b5174e3ee2e4a7213fc37705a947eea91fbd153180dad8d46492f388d035e5ed9784a7d3bb31e1804690ff5b7cbe874c0
   languageName: node
   linkType: hard
 
