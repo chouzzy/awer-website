@@ -189,8 +189,8 @@ export default function MinhaContaPage() {
                                 <Icon as={PiCreditCard} color="brand.400" />
                                 <Text fontSize={{base:'lg', md:'xl'}} fontWeight="medium">Status</Text>
                             </HStack>
-                            <Badge fontSize={{base:'md', md:'lg'}} py={1} px={4} fontWeight="medium" variant="solid"  colorPalette={subscription.status === 'active' ? 'green' : 'red'}>
-                                {subscription.status === 'active' ? 'Ativa' : 'Inativa'}
+                            <Badge fontSize={{base:'md', md:'lg'}} py={1} px={4} fontWeight="medium" variant="solid" colorScheme={subscription.status === 'active' ? 'green' : subscription.status === 'trialing' ? 'blue' : 'red'}>
+                                {subscription.status === 'active' ? 'Ativa' : subscription.status === 'trialing' ? 'Em Teste' : 'Inativa'}
                             </Badge>
                         </Flex>
                     </VStack>
