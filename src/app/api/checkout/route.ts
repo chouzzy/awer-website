@@ -30,13 +30,15 @@ export async function POST(request: Request) {
         const cancelUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/tecnologia/botrt`;
 
         // Cria a sessão de checkout no Stripe
+        const trialDays = parseInt(process.env.NEXT_PUBLIC_TRIAL_DAYS || '0', 10);
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
-                {
-                    price: priceId, // O ID do preço do plano (ex: price_xxxxxx)
-                    quantity: 1,
-                },
+            {
+                price: priceId, // O ID do preço do plano (ex: price_xxxxxx)
+                quantity: 1,
+            },
             ],
             mode: 'subscription', // Define que estamos criando uma assinatura
             success_url: successUrl,
@@ -45,6 +47,14 @@ export async function POST(request: Request) {
             // A PEÇA CHAVE: Anexa o ID do nosso usuário à sessão.
             // O backend usará este ID para saber para quem é a assinatura.
             client_reference_id: auth0UserId,
+
+            // ====================================================================
+            // ✨ NOVA LINHA ADICIONADA AQUI ✨
+            // Adiciona 7 dias de teste gratuito à assinatura.
+            // ====================================================================
+            subscription_data: {
+            trial_period_days: trialDays,
+            },
         });
 
         // Retorna a URL da sessão de checkout para o frontend
