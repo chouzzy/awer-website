@@ -53,7 +53,7 @@ const plansData = [
             "Infraestrutura de servidores inclusa",
             "Suporte e treinamento personalizado",
         ],
-        buttonText: "Assinar Agora",
+        buttonText: "Assinar Agora (Grátis 7 dias)",
     },
     {
         name: "Plano Anual",
@@ -73,7 +73,7 @@ const plansData = [
             "Prioridade no atendimento de suporte",
             "Suporte e treinamento personalizado",
         ],
-        buttonText: "Quero Economizar",
+        buttonText: "Quero Economizar (Grátis 7 dias)",
         isRecommended: true,
     },
     {
@@ -92,7 +92,7 @@ const plansData = [
             "Emissão de guias via Banco do Brasil (em breve)",
             "Emissão de guias via PJE (em breve)",
         ],
-        buttonText: "Seja Premium",
+        buttonText: "Seja Premium (em breve)",
     }
 ];
 
