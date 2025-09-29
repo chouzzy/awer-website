@@ -62,6 +62,7 @@ export async function POST(request: Request) {
             // 2. Habilita a coleta de ID Fiscal (CPF ou CNPJ)
             tax_id_collection: {
                 enabled: true,
+                required: true, // Torna o campo obrigatório
             },
 
             // 3. Adiciona campos personalizados para outras informações
