@@ -36,25 +36,58 @@ export async function POST(request: Request) {
             payment_method_types: ['card'],
             line_items: [
                 {
-                    price: priceId, // O ID do preço do plano (ex: price_xxxxxx)
+                    price: priceId,
                     quantity: 1,
                 },
             ],
-            mode: 'subscription', // Define que estamos criando uma assinatura
+            mode: 'subscription',
             success_url: successUrl,
             cancel_url: cancelUrl,
-
-            // A PEÇA CHAVE: Anexa o ID do nosso usuário à sessão.
-            // O backend usará este ID para saber para quem é a assinatura.
             client_reference_id: auth0UserId,
-
-            // ====================================================================
-            // ✨ NOVA LINHA ADICIONADA AQUI ✨
-            // Adiciona 7 dias de teste gratuito à assinatura.
-            // ====================================================================
             subscription_data: {
                 trial_period_days: trialDays,
+                // É uma boa prática também salvar o ID do seu sistema nos metadados da assinatura
+                metadata: {
+                    auth0UserId: auth0UserId,
+                }
             },
+
+            // ====================================================================
+            // ✨ ALTERAÇÕES ADICIONADAS AQUI ✨
+            // ====================================================================
+
+            // 1. Coleta de endereço (Recomendado para notas fiscais e validação)
+            billing_address_collection: 'required',
+
+            // 2. Habilita a coleta de ID Fiscal (CPF ou CNPJ)
+            tax_id_collection: {
+                enabled: true,
+            },
+
+            // 3. Adiciona campos personalizados para outras informações
+            custom_fields: [
+                {
+                    key: 'razao_social',
+                    label: {
+                        type: 'custom',
+                        custom: 'Razão Social',
+                    },
+                    type: 'text',
+                },
+                {
+                    key: 'inscricao_estadual',
+                    label: {
+                        type: 'custom',
+                        custom: 'Inscrição Estadual (Opcional)',
+                    },
+                    type: 'text',
+                    optional: true, // Define que este campo não é obrigatório
+                },
+            ],
+
+            // ====================================================================
+            // ✨ FIM DAS ALTERAÇÕES ✨
+            // ====================================================================
         });
 
         // Retorna a URL da sessão de checkout para o frontend
