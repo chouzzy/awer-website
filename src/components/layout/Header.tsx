@@ -94,7 +94,7 @@ export function Header() {
                             _hover={{ cursor: 'pointer', color: 'brand.500', textDecoration: 'none' }}
                         >
                             <CustomText
-                                color={'headerColor'}
+                                color={item.href === window.location.pathname ? 'brand.600' : 'headerColor'}
                                 text={item.title}
                                 letterSpacing={1.8}
                                 textTransform={'uppercase'}
