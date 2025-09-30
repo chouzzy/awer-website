@@ -178,6 +178,7 @@ export function BotrtPlans() {
 
     return (
         <Flex
+            id='planos'
             as="section"
             w="100%"
             py={{ base: 16, md: 24 }}

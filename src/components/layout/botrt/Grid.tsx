@@ -25,17 +25,17 @@ export const gridData = {
         {
             iconSrc: "PiClockClockwise",
             title: "Eficiência Máxima",
-            description: "Transforme horas de pesquisa manual em segundos. Nossa automação extrai dados processuais de forma rápida e contínua. Isso significa menos tempo perdido e mais foco no que realmente importa: o sucesso do seu negócio."
+            description: "Transforme horas de pesquisa manual em segundos. Nossa automação extrai informações do TRT de forma rápida e contínua. Isso significa menos tempo perdido e mais foco no que realmente importa: o sucesso do seu negócio."
         },
         {
             iconSrc: "PiShieldCheck",
             title: "Precisão e Segurança",
-            description: "Elimine o risco de erro humano na coleta de informações. O BoTRT garante dados precisos e confiáveis, oferecendo mais segurança e tranquilidade na gestão dos seus prazos e processos."
+            description: "Elimine o risco de erro humano na coleta de informações. O BotTRT garante dados precisos e confiáveis, oferecendo mais segurança e tranquilidade na gestão dos seus prazos e processos."
         },
         {
             iconSrc: "PiChartLineUp",
             title: "Produtividade que gera retorno",
-            description: "Transforme o tempo economizado em oportunidades de inovação, melhoria contínua e conquistas que fazem a diferença no desempenho da sua empresa."
+            description: "Transforme o tempo economizado em oportunidades de inovação, melhoria contínua e conquistas que fazem a diferença no desempenho de seu escritório."
 
         }
     ]
@@ -112,14 +112,6 @@ export function BotrtGrid() {
                 >
                     {gridData.section.heading}
                 </Heading>
-                <Text
-                    fontSize={{ base: 'md', md: 'xl' }}
-                    color="gray.400"
-                    maxW="2xl"
-                    mx="auto"
-                >
-                    {gridData.section.description}
-                </Text>
             </VStack>
 
             <MotionFlex
@@ -136,6 +128,7 @@ export function BotrtGrid() {
                     <MotionFlex
                         key={index}
                         variants={cardVariants}
+                        w='100%'
                     >
                         <FeatureCard
                             icon={feature.icon}
@@ -162,6 +155,7 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
     return (
         <VStack
             p={{ base: 4, md: 8 }}
+            w='100%'
             bg="#0b0b0bff"
             borderRadius="xl"
             border="1px solid"
@@ -177,12 +171,12 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
         >
             <Flex
                 p={3}
-                bg="gray.800"
+                bg="brand.600"
                 borderRadius="lg"
                 justify="center"
                 align="center"
             >
-                <Icon as={icon} boxSize={12} color="white" />
+                <Icon as={icon} boxSize={12} color="white"   />
             </Flex>
             <Heading as="h3" size={{ base: "lg", md: "2xl" }}>{title}</Heading>
             <Text color="gray.400" fontSize={{ base: "md", md: "lg" }}>{description}</Text>

@@ -17,8 +17,8 @@ import { motion, Variants } from 'framer-motion';
 //   DADOS DE TEXTO E SRC
 // ============================================================================
 export const visualData = {
-    heading: "Interface intuitiva",
-    description: "A interface do aplicativo foi projetada para ser simples e intuitiva, facilitando o acesso rápido às informações do TRT. Com poucos cliques, é possível visualizar dados detalhados e exportar facilmente relatórios completos em formato de planilha, tornando o processo de análise e compartilhamento muito mais ágil e eficiente.",
+    heading: "Acesse todos os TRTs de uma só vez",
+    description: "Com a sua nova interface simples e intuitiva, com poucos cliques é possível visualizar dados detalhados e exportar relatórios completos dos Tribunais Regionais do Trabalho (TRTs).",
     image: {
         src: "/botrt/visual/visual.png",
         alt: "BoRTT Visual"
@@ -66,11 +66,13 @@ export function BotrtVisual() {
             bg="black"
             color="white"
             zIndex={10}
+            gap={8}
         >
             <VStack gap={4} textAlign="center" mb={{ base: 12, md: 16 }}>
                 <Heading
                     as="h2"
                     fontSize={{ base: '4xl', md: '6xl' }}
+                    letterSpacing={'-0.02em'}
                     fontWeight="bold"
                     lineHeight={1.2}
                 >
@@ -79,7 +81,7 @@ export function BotrtVisual() {
                 <Text
                     fontSize={{ base: 'md', md: 'xl' }}
                     color="gray.400"
-                    maxW="3xl"
+                    maxW="4xl"
                     mx="auto"
                 >
                     {visualData.description}
@@ -89,7 +91,7 @@ export function BotrtVisual() {
             <MotionFlex
                 flexDir={{ base: 'column', md: 'row' }}
                 gap={{ base: 6, md: 8 }}
-                maxW="container.xl"
+                maxW="7xl"
                 mx="auto"
                 variants={containerVariants}
                 initial="hidden"
@@ -114,8 +116,8 @@ interface BoTRTPicureProps { }
 function BoTRTPicure({ }: BoTRTPicureProps) {
     return (
         <VStack
-            p={{ base: 2, md: 8 }}
-            borderRadius="xl"
+            p={{ base: 2, md: 2 }}
+            borderRadius={40}
             border="1px solid"
             borderColor="gray.800"
             gap={5}

@@ -8,6 +8,7 @@ import { BottomFooter } from "@/components/layout/BottomFooter";
 import { Auth0ProviderWithHistory } from '@/components/providers/Auth0ProviderWithHistory';
 import { ProfileProvider } from '@/contexts/ProfileContext';
 import { CookieConsentBanner } from '@/components/ui/CookieConsentBanner';
+import WhatsButton from '@/components/ui/WhatsButton';
 
 
 // const geistSans = Geist({
@@ -43,6 +44,7 @@ export default function RootLayout({
                 <Footer />
                 <BottomFooter />
                 <CookieConsentBanner />
+                <WhatsButton/>
               </Container>
             </ProfileProvider>
           </Auth0ProviderWithHistory>

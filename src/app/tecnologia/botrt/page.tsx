@@ -5,6 +5,7 @@ import { BoTRTCallToAction } from "@/components/layout/botrt/CallToAction";
 import { ContactUs } from "@/components/layout/botrt/Contact";
 import { BotrtExamples } from "@/components/layout/botrt/Examples";
 import { BotrtGrid } from "@/components/layout/botrt/Grid";
+import { BotrtHero } from "@/components/layout/botrt/Hero";
 // ============================================================================
 //   IMPORTS
 // ============================================================================
@@ -22,15 +23,15 @@ export default function BotrtLandingPage() {
     // --- Renderização do Componente ---
     return (
         <>
-        <BotrtExamples/>
-        {/* <BoTRTCallToAction/> */}
-        <BotrtVisual/>
-        {/* <BoTRTCallToAction/> */}
-        <BotrtGrid/>
-        <FeedbacksCarousel/>
-        <BotrtPlans/>
-        {/* <BoTRTCallToAction/> */}
-        <ContactUs/>
+            <BotrtHero />
+            <BotrtExamples />
+            <BotrtVisual />
+            <BoTRTCallToAction/>
+            <BotrtGrid />
+            {/* <FeedbacksCarousel /> */}
+            <BotrtPlans />
+            {/* <BoTRTCallToAction/> */}
+            <ContactUs />
         </>
     )
 }
