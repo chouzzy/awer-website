@@ -110,7 +110,7 @@ export function BotrtExamples() {
 
                 <Flex justifyContent={'center'} alignItems={'center'} border={'8px solid'} borderColor={'brand.600'} borderRadius={'2xl'} boxShadow="0 0 20px 5px #ff5f5e99" overflow='hidden'>
                     <Box w={{ base: '300px', md: '360px' }} h={'100%'} overflow={'hidden'} >
-                        <video width="100%" height="100%" autoPlay loop playsInline>
+                        <video width="100%" height="100%" autoPlay loop playsInline muted>
                             <source src="/botrt/video/promo.mp4" type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
