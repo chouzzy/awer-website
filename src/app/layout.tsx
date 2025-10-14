@@ -39,8 +39,8 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body>
-         <GoogleTagManager /> 
         <Provider>
+          <GoogleTagManager />
           <Auth0ProviderWithHistory>
             <ProfileProvider>
               <Container centerContent p={0} minH="100vh" maxW='100vw' display="flex" flexDirection="column" pos={'relative'} overflowX="hidden" color={'textPrimary'}>
