@@ -9,4 +9,6 @@ interface GestaoPageData {
     services: CasesProps[]
 }
 
+
+
 export type {GestaoPageData}

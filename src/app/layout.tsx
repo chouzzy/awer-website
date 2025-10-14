@@ -9,6 +9,7 @@ import { Auth0ProviderWithHistory } from '@/components/providers/Auth0ProviderWi
 import { ProfileProvider } from '@/contexts/ProfileContext';
 import { CookieConsentBanner } from '@/components/ui/CookieConsentBanner';
 import WhatsButton from '@/components/ui/WhatsButton';
+import GoogleTagManager from '@/components/GoogleTagManager';
 
 
 // const geistSans = Geist({
@@ -38,13 +39,14 @@ export default function RootLayout({
           <Auth0ProviderWithHistory>
             <ProfileProvider>
               <Container centerContent p={0} minH="100vh" maxW='100vw' display="flex" flexDirection="column" pos={'relative'} overflowX="hidden" color={'textPrimary'}>
+                <GoogleTagManager />
                 {/* <Image className={'rotating-bg'} src={'main/background.svg'} objectPosition={{base:'center',md:'top'}} objectFit={{ base: 'contain', md: 'cover' }} pos={'absolute'} h={{md: '120vh' }} w='100%' zIndex={-1} opacity={{base:0.8, md:0.5}}  mt={{base:32, md:''}}/> */}
                 <Header />
                 {children}
                 <Footer />
                 <BottomFooter />
                 <CookieConsentBanner />
-                <WhatsButton/>
+                <WhatsButton />
               </Container>
             </ProfileProvider>
           </Auth0ProviderWithHistory>
