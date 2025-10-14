@@ -26,6 +26,9 @@ import GoogleTagManager from '@/components/GoogleTagManager';
 export const metadata: Metadata = {
   title: "Awer Consultoria",
   description: "",
+  verification: {
+    google: 'M3UzLsJpL1zYFyj5Wt6wbWHLzefipBgkEYLZ-yHSGoQ',
+  },
 };
 
 export default function RootLayout({
@@ -36,6 +39,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body>
+         <GoogleTagManager /> 
         <Provider>
           <Auth0ProviderWithHistory>
             <ProfileProvider>
