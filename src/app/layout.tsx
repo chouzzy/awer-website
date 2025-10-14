@@ -38,6 +38,9 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
+      <head>
+        <meta name="google-site-verification" content="M3UzLsJpL1zYFyj5Wt6wbWHLzefipBgkEYLZ-yHSGoQ" />
+      </head>
       <body>
         <Provider>
           <GoogleTagManager />
