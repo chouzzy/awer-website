@@ -55,7 +55,7 @@ export function Hero({pageData}: { pageData: GestaoPageData}) {
             animate="visible"
             variants={containerVariants}
         >
-            <VStack gap={6} maxW="3xl">
+            <VStack gap={6} maxW="5xl">
                 <MotionHeading
                     as="h1"
                     fontSize={{ base: '3xl', md: '5xl' }}

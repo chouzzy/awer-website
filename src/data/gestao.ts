@@ -3,9 +3,9 @@ import { whatsappLink } from "@/utils";
 
 const pageData: GestaoPageData = {
     hero: {
-        title: "Inteligência Financeira para Decisões Estratégicas",
-        subtitle: "Alinhamos seus dados financeiros aos seus objetivos de negócio, transformando números em um roteiro claro para o crescimento sustentável.",
-        ctaButton: "Fale com um Especialista",
+        title: "Consultoria Especializada em Reestruturação Financeira para Pequenas e Médias Empresas",
+        subtitle: "Entregamos clareza nos seus resultados e apontamos o que falta para sua empresa lucrar o que merece.",
+        ctaButton: "QUERO UM DIAGNÓSTICO FINANCEIRO GRÁTIS",
     },
     // A MUDANÇA: Novos dados para as seções de serviço
     services: [
@@ -14,7 +14,7 @@ const pageData: GestaoPageData = {
             tagLabelColor: 'brand.500', // Categoria
             link:whatsappLink(),
             product: "Gestão de Fluxo de Caixa",
-            description: "Monitore entradas e saídas, otimize o capital de giro e garanta a saúde financeira da sua empresa com nosso sistema de gestão de fluxo de caixa.",
+            description: "Monitore Entradas e Saídas, Otimize o Capital de Giro e Garanta a Saúde Financeira da Sua Empresa com Nosso Sistema de Gestão de Fluxo de Caixa.",
             image: "/gestao/fluxo-de-caixa.jpg",
             orientation: "image-right" // texto na direita, imagem na esquerda
         },
@@ -23,7 +23,7 @@ const pageData: GestaoPageData = {
             tagLabelColor: 'yellow.600', // Categoria
             link:whatsappLink(),
             product: "Gestão Inteligente de Estoque e Compras",
-            description: "Controle seu estoque de forma eficiente, evitando perdas e otimizando o armazenamento. Gerencie suas compras de forma estratégica para não deixar o seu dinheiro parado",
+            description: "Controle Seu Estoque de Forma Eficiente, Evitando Perdas e Otimizando o Armazenamento. Gerencie Suas Compras de Forma Estratégica para Não Deixar o Seu Dinheiro Parado",
             image: "/gestao/estoque-2.png",
             orientation: "image-left" // texto na esquerda, imagem na direita
         },
@@ -32,7 +32,7 @@ const pageData: GestaoPageData = {
             tagLabelColor: 'cadetBlue', // Categoria
             link:whatsappLink(),
             product: "Painel de Resultados",
-            description: "Acompanhe seus principais indicadores de desempenho em tempo real e tome decisões mais assertivas. Visualize seus resultados de forma clara e objetiva.",
+            description: "Acompanhe Seus Principais Indicadores de Desempenho em Tempo Real e Tome Decisões Mais Assertivas. Visualize Seus Resultados de Forma Clara e Objetiva.",
             image: "/gestao/dashboard.jpg",
             orientation: "image-right"
         },
@@ -41,7 +41,7 @@ const pageData: GestaoPageData = {
             tagLabelColor: 'blue.600', // Categoria
             link:whatsappLink(),
             product: "Definição de Preços e Margens de Produtos",
-            description: "Defina preços e margens de lucro de forma estratégica, garantindo que seu negócio seja rentável. Valorize seus  seus produtos e otimize seus ganhos.",
+            description: "Defina Preços e Margens de Lucro de Forma Estratégica, Garantindo que Seu Negócio Seja Rentável. Valorize Seus Seus Produtos e Otimize Seus Ganhos.",
             image: "/gestao/compras.jpg",
             orientation: "image-left"
         }
