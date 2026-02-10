@@ -25,9 +25,12 @@ import GoogleTagManager from '@/components/GoogleTagManager';
 
 export const metadata: Metadata = {
   title: "Awer Consultoria",
-  description: "",
+  description: "", // Recomendo colocar uma descrição curta aqui depois para o SEO!
   verification: {
     google: 'M3UzLsJpL1zYFyj5Wt6wbWHLzefipBgkEYLZ-yHSGoQ',
+    other: {
+      "facebook-domain-verification": ["91apbj0uomg4mowfhjz822nmduc48g"],
+    },
   },
 };
 
