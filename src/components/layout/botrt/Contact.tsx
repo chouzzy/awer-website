@@ -30,7 +30,7 @@ import { PiHeadset, PiWhatsappLogo } from "react-icons/pi";
 //   DADOS E FUNÇÕES UTILITÁRIAS
 // ============================================================================
 
-const whatsappNumber = 5511971815592;
+const whatsappNumber = 5511939437893;
 
 // Interface para os valores do formulário
 interface FormValues {
