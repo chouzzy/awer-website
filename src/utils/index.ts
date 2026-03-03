@@ -4,7 +4,7 @@
 // Este bloco centraliza todas as informações de contato e links estáticos
 // da empresa, facilitando a manutenção e garantindo consistência.
 
-const whatsappNumber = 5511971815592;
+const whatsappNumber = 5511939437893;
 const email = `danilo@awer.co`;
 const instagram = `https://www.instagram.com/awer.consultoria/`;
 const linkedin = `https://br.linkedin.com/company/awer-assessoria-de-gest%C3%A3o-e-solu%C3%A7%C3%B5es-tecnol%C3%B3gicas`;
