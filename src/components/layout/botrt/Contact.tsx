@@ -2,7 +2,7 @@
 'use client';
 
 // --- React e Frameworks ---
-import { useState } from 'react';
+import { track } from '@vercel/analytics'; // <-- 1. Importe o track aqui
 import {
     Flex,
     Heading,
@@ -25,6 +25,8 @@ import { useForm } from "react-hook-form";
 
 // --- Ícones ---
 import { PiHeadset, PiWhatsappLogo } from "react-icons/pi";
+import { whatsappLink } from '@/utils';
+import { pageData } from '@/data/gestao';
 
 // ============================================================================
 //   DADOS E FUNÇÕES UTILITÁRIAS
@@ -64,6 +66,9 @@ const itemVariants: Variants = {
     }
 };
 
+// 2. Crie a função que dispara o evento e depois abre o link
+
+
 // ============================================================================
 //   SUB-COMPONENTE: Animação de Contato
 // ============================================================================
@@ -89,7 +94,7 @@ function ContactAnimation() {
             align="center"
             position="relative"
         >
-           {View}
+            {View}
         </Flex>
     );
 }

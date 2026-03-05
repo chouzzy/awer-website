@@ -2,12 +2,12 @@
 // ============================================================================
 //   VARIANTES DE ANIMAÇÃO (Framer Motion)
 
+import { pageData } from "@/data/gestao";
 import { GestaoPageData } from "@/types";
 import { whatsappLink } from "@/utils";
 import { Flex, Heading, Button, VStack, HStack, Icon, Text } from "@chakra-ui/react";
 import { motion, Variants } from "framer-motion";
-import { PiArrowRight } from "react-icons/pi";
-
+import { track } from '@vercel/analytics';
 // ============================================================================
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -26,9 +26,18 @@ const itemVariants: Variants = {
     }
 };
 
+const handleWhatsAppClick = () => {
+    // Dispara o evento customizado na Vercel
+    track('Click_WhatsApp', {
+        local: 'Hero_Section',
+        texto_botao: pageData.hero.ctaButton
+    });
 
+    // Abre o link do WhatsApp
+    window.open(whatsappLink(), '_blank');
+};
 
-export function Hero({pageData}: { pageData: GestaoPageData}) {
+export function Hero({ pageData }: { pageData: GestaoPageData }) {
 
     const MotionFlex = motion(Flex);
     const MotionHeading = motion(Heading);
@@ -73,12 +82,12 @@ export function Hero({pageData}: { pageData: GestaoPageData}) {
                     {pageData.hero.subtitle}
                 </MotionText>
                 <MotionButton
-                    onClick={() => window.open(whatsappLink(), '_blank')}
+                    onClick={handleWhatsAppClick} // <-- 3. Chame a função aqui
                     size="lg"
                     py={7}
                     px={8}
                     bgColor={'brand.600'}
-                    _hover={{ bgColor: 'ghostWhite', color:'brand.600', transition: '0.3s' }}
+                    _hover={{ bgColor: 'ghostWhite', color: 'brand.600', transition: '0.3s' }}
                     color={'white'}
                     variants={itemVariants}
                 >
