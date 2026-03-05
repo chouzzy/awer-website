@@ -11,6 +11,7 @@ import { ProfileProvider } from '@/contexts/ProfileContext';
 import { CookieConsentBanner } from '@/components/ui/CookieConsentBanner';
 import WhatsButton from '@/components/ui/WhatsButton';
 import GoogleTagManager from '@/components/GoogleTagManager';
+import { Analytics } from "@vercel/analytics/next"
 
 
 // const geistSans = Geist({
@@ -53,6 +54,7 @@ export default function RootLayout({
                 {/* <Image className={'rotating-bg'} src={'main/background.svg'} objectPosition={{base:'center',md:'top'}} objectFit={{ base: 'contain', md: 'cover' }} pos={'absolute'} h={{md: '120vh' }} w='100%' zIndex={-1} opacity={{base:0.8, md:0.5}}  mt={{base:32, md:''}}/> */}
                 <Header />
                 {children}
+                <Analytics /> {/* <-- Adicione esta linha aqui */}
                 <Footer />
                 <BottomFooter />
                 <CookieConsentBanner />
