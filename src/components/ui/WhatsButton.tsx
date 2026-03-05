@@ -20,7 +20,7 @@ const handleWhatsAppClick = () => {
 export default function WhatsButton() {
     
     return (
-        <Link className="zap-tag" target={'_blank'} onClick={handleWhatsAppClick}>
+        <Link className="zap-tag" target={'_blank'} onClick={() => handleWhatsAppClick()}>
         
         <Flex zIndex={1} bg='#25D366' color="#fffafa"
         fontSize='1.8rem' borderRadius={'full'} p={4} 
