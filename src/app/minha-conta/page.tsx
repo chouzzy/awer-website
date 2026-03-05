@@ -10,18 +10,15 @@ import {
     VStack,
     Button,
     Icon,
-    Box,
     Spinner,
     Alert,
-    AlertTitle,
-    AlertDescription,
     Badge,
     HStack,
     Image,
 } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAuth0 } from '@auth0/auth0-react';
-import { PiCreditCard, PiCalendar, PiSealCheckFill, PiWarningCircleFill } from "react-icons/pi";
+import { PiCreditCard, PiCalendar, PiSealCheckFill } from "react-icons/pi";
 
 // --- Tipagem para os dados da assinatura ---
 interface SubscriptionData {
@@ -202,7 +199,7 @@ export default function MinhaContaPage() {
                     colorScheme="brand"
                     size="lg"
                     w="100%"
-                    onClick={redirectToCustomerPortal}
+                    onClick={() => redirectToCustomerPortal()}
                     loading={isPortalLoading}
                 >
                     Gerenciar Assinatura e Pagamentos

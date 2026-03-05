@@ -48,7 +48,7 @@ export const ColorModeButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     return (
       <ClientOnly fallback={<Skeleton boxSize="8" />}>
         <MotionIconButton
-          onClick={toggleColorMode}
+          onClick={() => toggleColorMode()}
           aria-label="Mudar tema"
           bgColor={'transparent'}
           color='headerColor'
