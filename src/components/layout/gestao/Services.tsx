@@ -1,3 +1,5 @@
+'use client';
+
 import { GestaoPageData } from "@/types";
 import { Flex, VStack, Heading, Button, SimpleGrid, Icon, Text, Image } from "@chakra-ui/react";
 import { motion, Variants } from "framer-motion";

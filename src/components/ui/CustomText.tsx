@@ -1,3 +1,5 @@
+'use client';
+
 import { Text, FlexProps as ChakraFlexProps, Flex } from "@chakra-ui/react";
 import { JSX } from "react";
 
