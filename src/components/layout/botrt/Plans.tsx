@@ -333,7 +333,7 @@ function PricingCard({ name, price, priceId, billingCycle, description, features
                         bgColor: 'brand.800',
                         color: "white"
                     }}
-                    onClick={onSubscribe}
+                    onClick={() => onSubscribe()}
                     loading={isLoading}
                     // 4. O botão agora também depende dos termos aceites
                     disabled={!priceId || !termsAccepted || isLoading}
