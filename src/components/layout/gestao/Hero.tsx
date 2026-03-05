@@ -82,7 +82,7 @@ export function Hero({ pageData }: { pageData: GestaoPageData }) {
                     {pageData.hero.subtitle}
                 </MotionText>
                 <MotionButton
-                    onClick={handleWhatsAppClick} // <-- 3. Chame a função aqui
+                    onClick={() => handleWhatsAppClick()} // <-- 3. Chame a função aqui
                     size="lg"
                     py={7}
                     px={8}
