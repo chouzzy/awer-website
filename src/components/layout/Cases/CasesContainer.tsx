@@ -1,3 +1,5 @@
+'use client';
+
 import { Flex } from "@chakra-ui/react";
 import { Cases } from "./Cases";
 import { cases } from "@/data/cases";

@@ -1,3 +1,5 @@
+'use client';
+
 import { CustomText } from "@/components/ui/CustomText";
 import { MotionButton } from "@/components/ui/MotionButton";
 import { Flex } from "@chakra-ui/react";

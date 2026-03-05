@@ -1,4 +1,4 @@
-import { whatsappLink } from "@/utils";
+'use client';
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { motion, Variants } from "framer-motion";
 
