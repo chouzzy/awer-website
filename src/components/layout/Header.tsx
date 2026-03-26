@@ -24,6 +24,7 @@ import { HeaderMobileMenu } from "./HeaderMobileMenu";
 import { headerData } from "@/data/header";
 import { UserAvatar } from "./UserAvatar";
 import { useProfile } from "@/contexts/ProfileContext"; // 1. Importa o nosso hook de perfil
+import { PiHeadsetBold } from "react-icons/pi";
 
 // ============================================================================
 //   VARIANTES DE ANIMAÇÃO (Framer Motion)
@@ -46,9 +47,12 @@ export function Header() {
 
     // --- Hooks e Estado ---
     const MotionFlex = motion(Flex);
-    const { isAuthenticated, loginWithRedirect } = useAuth0();
+    const { isAuthenticated, loginWithRedirect, user } = useAuth0();
     // 2. Obtém os dados do perfil do nosso contexto
     const { profile, isLoading: isProfileLoading } = useProfile();
+
+    // Lógica para definir se é administrador (Equipe Awer)
+    const isAdmin = isAuthenticated && user?.email?.endsWith('@awer.co');
 
     // --- Renderização do Componente ---
     return (
@@ -78,23 +82,17 @@ export function Header() {
 
             {/* Seção Direita: Navegação */}
             <Flex alignItems={'center'} gap={{ base: 2, sm: 3, md: 4 }}>
-
-                {/* Navegação para Desktop */}
                 <Flex
                     gap={8}
                     fontSize={'sm'}
                     display={{ base: 'none', md: 'flex' }}
                     alignItems="center"
                 >
-                    {/* Links de Navegação Padrão */}
+                    {/* Links Padrão (Home, Serviços, etc) */}
                     {headerData.menu.map((item, index) => (
-                        <ChakraLink
-                            key={index}
-                            href={item.href}
-                            _hover={{ cursor: 'pointer', color: 'brand.500', textDecoration: 'none' }}
-                        >
+                        <ChakraLink key={index} href={item.href} _hover={{ color: 'brand.500', textDecoration: 'none' }}>
                             <CustomText
-                                color={item.href === window.location.pathname ? 'brand.600' : 'headerColor'}
+                                color={typeof window !== 'undefined' && window.location.pathname === item.href ? 'brand.600' : 'headerColor'}
                                 text={item.title}
                                 letterSpacing={1.8}
                                 textTransform={'uppercase'}
@@ -102,58 +100,61 @@ export function Header() {
                         </ChakraLink>
                     ))}
 
-                    {/* 3. LÓGICA CONDICIONAL PARA O DASHBOARD */}
+                    {/* --- ÁREA HELP AWER (CLIENTE) --- */}
                     {isAuthenticated && (
-                        isProfileLoading ? (
-                            // Mostra um spinner enquanto o perfil está a ser carregado
-                            <Spinner size="sm" />
-                        ) : (
-                            // Se o perfil foi carregado e o utilizador é um cliente, mostra o link
-                            profile?.isAwerClient && (
-                                <ChakraLink
-                                    href="/dashboard"
-                                    _hover={{ cursor: 'pointer', color: 'brand.500', textDecoration: 'none' }}
+                        <ChakraLink href="/help" _hover={{ color: 'brand.500', textDecoration: 'none' }}>
+                            <CustomText text="Suporte" letterSpacing={1.8} textTransform={'uppercase'} />
+                        </ChakraLink>
+                    )}
+
+                    {/* --- ÁREA QG AWER (ADMIN) --- */}
+                    {isAdmin && (
+                        <ChakraLink href="/awer-admin/tickets" _hover={{ textDecoration: 'none' }}>
+                            <Button
+                                size="sm"
+                                bg="brand.500"
+                                color="white"
+                                px={4}
+                                _hover={{ bg: 'brand.600' }}
                                 >
+                                <Icon as={PiHeadsetBold} />
+                                HELP AWER
+                            </Button>
+                        </ChakraLink>
+                    )}
+
+                    {/* Lógica do Painel/Dashboard existente */}
+                    {isAuthenticated && (
+                        isProfileLoading ? <Spinner size="sm" /> :
+                            profile?.isAwerClient && (
+                                <ChakraLink href="/dashboard" _hover={{ textDecoration: 'none' }}>
                                     <CustomText
                                         borderRadius={'md'}
                                         bgColor={'ghostWhite'}
-                                        py={1}
-                                        px={2}
-                                        mr={4}
-                                        color={'brand.500'} // Cor de destaque
-                                        _hover={{ bgColor: 'brand.600', color: 'white', transition: 'all 0.3s ease' }}
+                                        py={1} px={2} mr={4}
+                                        color={'brand.500'}
                                         text="Painel"
                                         letterSpacing={1.8}
                                         textTransform={'uppercase'}
                                     />
                                 </ChakraLink>
                             )
-                        )
                     )}
 
-                    {/* Lógica para mostrar o Avatar ou o botão de "Entrar" */}
-                    {isAuthenticated ? (
-                        <UserAvatar />
-                    ) : (
-                        <Button
-                            color={'ghostWhite'}
-                            bgColor='transparent'
-                            border='1px solid'
-                            borderColor='whiteAlpha.300'
-                            onClick={() => loginWithRedirect()}
-                            _hover={{ bgColor: 'brand.600' }}
-                        >
+                    {/* Avatar ou Login */}
+                    {isAuthenticated ? <UserAvatar /> : (
+                        <Button onClick={() => loginWithRedirect()} /* ...estilos... */>
                             Entrar
                         </Button>
                     )}
                 </Flex>
 
-                {/* Menu Mobile (Hamburger) */}
+                {/* Menu Mobile - Passamos o isAdmin para ele também */}
                 <HeaderMobileMenu
                     isAuthenticated={isAuthenticated}
                     isAwerClient={profile?.isAwerClient || false}
+                    isAdmin={isAdmin}
                 />
-
             </Flex>
         </MotionFlex>
     );

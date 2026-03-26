@@ -1,0 +1,68 @@
+import { Flex, Container, Heading, Text, Box } from "@chakra-ui/react";
+import clientPromise from "@/lib/mongodb";
+import { AdminTicketList } from "./components/AdminTicketList";
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminTicketsPage() {
+  const client = await clientPromise;
+  const db = client.db("help_awer");
+
+  // Agregação MongoDB mais robusta e tolerante a falhas
+  const rawTickets = await db.collection("tickets").aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "clientId",
+        foreignField: "_id",
+        as: "clientInfo"
+      }
+    },
+    { 
+      $unwind: { 
+        path: "$clientInfo", 
+        preserveNullAndEmptyArrays: true // A MAGIA ESTÁ AQUI: Não apaga tickets sem cliente
+      } 
+    }, 
+    { $sort: { createdAt: -1 } }
+  ]).toArray();
+
+  // Serializa os dados com proteção contra nulos (optional chaining ?.)
+  const tickets = rawTickets.map(t => ({
+    id: t._id.toString(),
+    title: t.title,
+    status: t.status,
+    priority: t.priority,
+    createdAt: t.createdAt.toISOString(),
+    clientName: t.clientInfo?.name || "Cliente Desconhecido", // Fallback seguro
+    clientEmail: t.clientInfo?.email || "N/A",
+  }));
+
+  return (
+    <Container maxW="container.xl" py={{ base: 10, md: 20 }}>
+      <Flex direction="column" gap={8}>
+        
+        <Box>
+          <Heading as="h1" size="xl" color="ghostWhite" mb={2}>
+            QG <Box as="span" color="brand.500">Awer</Box>
+          </Heading>
+          <Text color="gray.400">
+            Painel de controlo. Gere todos os chamados, altera estados e dá baixa nos pedidos.
+          </Text>
+        </Box>
+
+        <Box 
+          w="100%" 
+          bg="rgba(15, 17, 21, 0.6)" 
+          borderRadius="2xl" 
+          border="1px solid" 
+          borderColor="whiteAlpha.100"
+          overflow="hidden"
+        >
+          <AdminTicketList initialTickets={tickets} />
+        </Box>
+
+      </Flex>
+    </Container>
+  );
+}
