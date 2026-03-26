@@ -47,7 +47,7 @@ export default async function AdminTicketsPage() {
             QG <Box as="span" color="brand.500">Awer</Box>
           </Heading>
           <Text color="gray.400">
-            Painel de controlo. Gere todos os chamados, altera estados e dá baixa nos pedidos.
+            Painel de controle. Gere todos os chamados, altera estados e dá baixa nos pedidos.
           </Text>
         </Box>
 
