@@ -7,7 +7,7 @@
 
 // --- Componentes Chakra UI ---
 // Usando o Menu do Ark UI, que é a base para o Chakra v3
-import { Box, Menu, Button, Portal, Link as ChakraLink, Avatar, Flex, Icon, Text, Spinner } from "@chakra-ui/react";
+import { Box, Menu, Button, Portal, Link as ChakraLink, Avatar, Flex, Icon, Text, Spinner, Badge } from "@chakra-ui/react";
 
 // --- Ícones ---
 import { PiList, PiSignOut } from "react-icons/pi";
@@ -29,95 +29,66 @@ import { useProfile } from "@/contexts/ProfileContext";
 interface HeaderMobileMenuProps {
     isAuthenticated: boolean;
     isAwerClient: boolean;
+    isAdmin?: boolean; // Adicionada prop
 }
 
-export function HeaderMobileMenu({ isAuthenticated, isAwerClient }: HeaderMobileMenuProps) {
-
+export function HeaderMobileMenu({ isAuthenticated, isAwerClient, isAdmin }: HeaderMobileMenuProps) {
     const { loginWithRedirect } = useAuth0();
     const { isLoading: isProfileLoading } = useProfile();
 
     return (
-        // Container que só exibe este componente em telas pequenas ('base')
-        // e o esconde em telas a partir de 'md' (medium).
-        <Box display={{ base: 'block', md: 'none' }} gap={8}>
-            {isAuthenticated && (
-                isProfileLoading ? (
-                    // Mostra um spinner enquanto o perfil está a ser carregado
-                    <Spinner size="sm" />
-                ) : (
-                    // Se o perfil foi carregado e o utilizador é um cliente, mostra o link
-                    isAwerClient && (
-                        <ChakraLink
-                            href="/dashboard" // A nova página do dashboard
-                            _hover={{ cursor: 'pointer', color: 'brand.500', textDecoration: 'none' }}
-                        >
-                            <CustomText
-                                borderRadius={'md'}
-                                bgColor={'ghostWhite'}
-                                py={1}
-                                px={2}
-                                mr={4}
-                                color={'brand.500'} // Cor de destaque
-                                _hover={{ bgColor: 'brand.600', color: 'white', transition: 'all 0.3s ease' }}
-                                text="Painel"
-                                letterSpacing={1.8}
-                                textTransform={'uppercase'}
-                            />
-                        </ChakraLink>
-                    )
-                )
-            )}
+        <Box display={{ base: 'block', md: 'none' }}>
+            <Flex align="center" gap={2}>
+                {/* Botão Painel rápido se for cliente */}
+                {isAuthenticated && !isProfileLoading && isAwerClient && (
+                    <ChakraLink href="/dashboard">
+                        <Badge colorPalette="red" variant="solid" borderRadius="full" px={2}>Painel</Badge>
+                    </ChakraLink>
+                )}
 
-            {isAuthenticated ? (
-                <UserAvatar />
-            ) : (
-                <Button
-                    mr={4}
-                    color={'ghostWhite'}
-                    bgColor='transparent'
-                    border='1px solid'
-                    borderColor='whiteAlpha.300'
-                    onClick={() => loginWithRedirect()}
-                    _hover={{ bgColor: 'brand.600' }}
-                >
-                    Entrar
-                </Button>
-            )}
+                {isAuthenticated ? <UserAvatar /> : (
+                    <Button size="sm" onClick={() => loginWithRedirect()}>Entrar</Button>
+                )}
 
-            {/* Menu Principal (Raiz) */}
-            <Menu.Root>
+                <Menu.Root>
+                    <Menu.Trigger asChild>
+                        <Button variant="outline" size="sm"><PiList /></Button>
+                    </Menu.Trigger>
 
-                {/* O botão que aciona a abertura do menu (ícone de lista/hamburger) */}
-                <Menu.Trigger asChild>
-                    <Button variant="outline" size="sm">
-                        <PiList />
-                    </Button>
-                </Menu.Trigger>
+                    <Portal>
+                        <Menu.Positioner>
+                            <Menu.Content>
+                                {/* Links Padrão */}
+                                {headerData.menu.map((item) => (
+                                    <Menu.Item key={item.title} value={item.title} asChild>
+                                        <ChakraLink href={item.href} w="100%" px={3} py={2}>{item.title}</ChakraLink>
+                                    </Menu.Item>
+                                ))}
 
-                {/* O Portal garante que o conteúdo do menu seja renderizado no topo da árvore DOM,
-                    evitando problemas de sobreposição (z-index). */}
-                <Portal>
-                    <Menu.Positioner>
-                        <Menu.Content>
+                                {/* --- LINKS DE SUPORTE NO MOBILE --- */}
+                                {isAuthenticated && (
+                                    <>
+                                        <Menu.Separator />
+                                        <Menu.Item value="suporte" asChild>
+                                            <ChakraLink href="/help" w="100%" px={3} py={2} color="brand.500" fontWeight="bold">
+                                                Minha Central de Suporte
+                                            </ChakraLink>
+                                        </Menu.Item>
+                                    </>
+                                )}
 
-                            {headerData.menu.map((item) => (
-                                <Menu.Item key={item.title} value={item.title} asChild>
-                                    <ChakraLink
-                                        href={item.href}
-                                        w="100%"
-                                        display="block"
-                                        px={3}
-                                        py={2}
-                                    >
-                                        {item.title}
-                                    </ChakraLink>
-                                </Menu.Item>
-                            ))}
-
-                        </Menu.Content>
-                    </Menu.Positioner>
-                </Portal>
-            </Menu.Root>
+                                {isAdmin && (
+                                    <Menu.Item value="admin" asChild>
+                                        <ChakraLink href="/awer-admin/tickets" w="100%" px={3} py={2} bg="brand.500" color="white">
+                                            QG Awer (Gestão)
+                                        </ChakraLink>
+                                    </Menu.Item>
+                                )}
+                            </Menu.Content>
+                        </Menu.Positioner>
+                    </Portal>
+                </Menu.Root>
+            </Flex>
         </Box>
     );
 }
