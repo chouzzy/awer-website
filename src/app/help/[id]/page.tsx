@@ -54,7 +54,7 @@ export default async function HelpTicketDetailPage({
         {/* Navegação */}
         <Box>
           <Link href="/help" _hover={{ textDecoration: 'none' }}>
-            <Button variant="ghost" color="gray.400" _hover={{ color: "white" }} mb={4} px={0}>
+            <Button variant="ghost" color="gray.400" _hover={{ color: "white" }} mb={3} px={0}>
               <PiArrowLeftBold style={{ marginRight: '8px' }} />
               Voltar aos Meus Chamados
             </Button>
