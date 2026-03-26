@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createTicket } from "@/actions/tickets";
@@ -13,8 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { PiUploadSimpleBold } from "react-icons/pi";
 import { useAuth0 } from "@auth0/auth0-react";
-// Assumindo que o toaster do Chakra v3 está no vosso projeto
-// import { toaster } from "@/components/ui/toaster"; 
+
 const ticketSchema = z.object({
   title: z.string().min(5, "O título deve ter pelo menos 5 caracteres."),
   description: z.string().min(10, "A descrição deve ter pelo menos 10 caracteres."),
@@ -38,6 +37,7 @@ export function CreateTicketForm({ clientId }: { clientId: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 
+
   const priorityCollection = useMemo(
     () => createListCollection({ items: priorityOptions.items }),
     []
@@ -45,6 +45,7 @@ export function CreateTicketForm({ clientId }: { clientId: string }) {
 
   const {
     register,
+    control,
     handleSubmit,
     reset,
     formState: { errors },
@@ -128,30 +129,50 @@ export function CreateTicketForm({ clientId }: { clientId: string }) {
         {/* Campo: Prioridade */}
         <Box>
           <Text mb={1} fontSize="sm" color="gray.300" fontWeight="medium">Prioridade</Text>
-          {/* No Chakra v3, select nativo estilizado é prático para este caso simples */}
-            <Select.Root collection={priorityCollection} size="sm">
-            <Select.HiddenSelect />
-            <Select.Control>
-              <Select.Trigger>
-              <Select.ValueText placeholder="Seleciona a prioridade" />
-              </Select.Trigger>
-              <Select.IndicatorGroup>
-              <Select.Indicator />
-              </Select.IndicatorGroup>
-            </Select.Control>
-            <Portal>
-              <Select.Positioner>
-              <Select.Content>
-                {priorityOptions.items.map((option) => (
-                <Select.Item item={option} key={option.value}>
-                  {option.label}
-                  <Select.ItemIndicator />
-                </Select.Item>
-                ))}
-              </Select.Content>
-              </Select.Positioner>
-            </Portal>
-            </Select.Root>
+
+          <Controller
+            control={control} // Adicione o 'control' que vem do useForm
+            name="priority"
+            render={({ field }) => (
+              <Select.Root
+                collection={priorityCollection}
+                size="sm"
+                name={field.name}
+                value={[field.value]} // Chakra v3 usa array para valores
+                onValueChange={(details) => {
+                  field.onChange(details.value[0]); // Atualiza o formulário com a string ("LOW", etc)
+                }}
+                onInteractOutside={() => field.onBlur()}
+              >
+                <Select.HiddenSelect />
+                <Select.Control>
+                  <Select.Trigger>
+                    <Select.ValueText placeholder="Seleciona a prioridade" />
+                  </Select.Trigger>
+                  <Select.IndicatorGroup>
+                    <Select.Indicator />
+                  </Select.IndicatorGroup>
+                </Select.Control>
+                <Portal>
+                  <Select.Positioner>
+                    <Select.Content bg="#1A1A1A" borderColor="whiteAlpha.200">
+                      {priorityOptions.items.map((option) => (
+                        <Select.Item
+                          item={option}
+                          key={option.value}
+                          _hover={{ bg: "whiteAlpha.100" }}
+                        >
+                          {option.label}
+                          <Select.ItemIndicator />
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Positioner>
+                </Portal>
+              </Select.Root>
+            )}
+          />
+          {errors.priority && <Text color="red.400" fontSize="xs" mt={1}>{errors.priority.message}</Text>}
         </Box>
 
         {/* Campo: Anexos (DO Spaces) */}
