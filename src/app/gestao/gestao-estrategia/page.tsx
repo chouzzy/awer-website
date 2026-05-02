@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiChartLineUpBold, PiTargetBold, PiTreeStructureBold,
+  PiMedalBold, PiHandshakeBold, PiLightbulbBold,
+} from "react-icons/pi";
 
-export default function GestaoEEstrategia() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiChartLineUpBold, title: "Diagnóstico Organizacional", description: "Mapeamos a situação atual da empresa — processos, people, mercado e finanças — para identificar os principais pontos de alavancagem." },
+  { icon: PiTargetBold, title: "Definição de Objetivos OKR", description: "Estabelecemos metas claras, mensuráveis e alinhadas à visão de longo prazo com a metodologia OKR, criando foco e responsabilidade." },
+  { icon: PiTreeStructureBold, title: "Reestruturação de Processos", description: "Redesenhamos fluxos de trabalho para eliminar gargalos, reduzir desperdícios e aumentar a produtividade da equipe." },
+  { icon: PiLightbulbBold, title: "Planejamento Estratégico", description: "Desenvolvemos um plano de negócios robusto com análise de mercado, posicionamento competitivo e roadmap de crescimento." },
+  { icon: PiHandshakeBold, title: "Gestão de Pessoas", description: "Alinhamos a equipe aos objetivos da empresa com cultura organizacional, liderança e estrutura de responsabilidades bem definidas." },
+  { icon: PiMedalBold, title: "Acompanhamento de Resultados", description: "Monitoramos a execução do plano com reuniões periódicas de revisão e ajuste, garantindo que os objetivos sejam atingidos." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function GestaoEstrategiaPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Gestão e Estratégia"
+        title="Clareza de direção para"
+        highlight="crescer com consistência"
+        subtitle="Implementamos boas práticas de gestão e planejamento estratégico para otimizar processos e gerar melhores resultados. Uma visão externa que transforma sua empresa."
+        ctaLabel="Quero um diagnóstico gratuito"
+        trackingId="gestao_estrategia"
+        icon={PiChartLineUpBold}
+      />
+      <ServiceFeatures
+        heading="Como estruturamos sua estratégia"
+        subheading="Um processo metodológico que vai do diagnóstico à execução, garantindo resultados sustentáveis."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Sua empresa tem potencial de crescer mais?"
+        subheading="Muitas vezes, um olhar externo identifica oportunidades que passam despercebidas no dia a dia. Agende uma conversa."
+        ctaLabel="Agendar diagnóstico gratuito"
+        trackingId="gestao_estrategia"
+        whatsappMessage="Olá! Tenho interesse em Consultoria de Gestão e Estratégia com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

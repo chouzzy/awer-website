@@ -1,6 +1,7 @@
 'use client';
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { motion, Variants } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
 
 
 
@@ -39,6 +40,7 @@ export function BoTRTCallToAction() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {
+                trackEvent({ event: 'cta_click', label: 'Teste por 7 dias grátis', source: 'botrt_cta_section' });
                 const element = document.getElementById('planos');
                 if (element) {
                     element.scrollIntoView({ behavior: 'smooth' });

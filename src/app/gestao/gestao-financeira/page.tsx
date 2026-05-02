@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiBankBold, PiReceiptBold, PiScalesBold,
+  PiChartPieBold, PiArrowsLeftRightBold, PiWarningBold,
+} from "react-icons/pi";
 
-export default function GestaoFinanceira() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiArrowsLeftRightBold, title: "Gestão de Fluxo de Caixa", description: "Controle de entradas e saídas com projeções de curto e médio prazo para garantir que sua empresa nunca fique sem caixa." },
+  { icon: PiReceiptBold, title: "DRE e Análise de Lucratividade", description: "Demonstrativo de Resultado estruturado para entender quais produtos, serviços ou clientes são realmente lucrativos." },
+  { icon: PiChartPieBold, title: "Planejamento Orçamentário", description: "Orçamento anual detalhado com metas financeiras realistas e controle de desvios mês a mês." },
+  { icon: PiScalesBold, title: "Precificação e Margens", description: "Definição de preços e margens que garantem lucratividade real, considerando todos os custos diretos e indiretos." },
+  { icon: PiBankBold, title: "Relacionamento com Bancos", description: "Orientação para captação de crédito, negociação de taxas e estruturação de dívidas de forma sustentável." },
+  { icon: PiWarningBold, title: "Gestão de Riscos Financeiros", description: "Identificamos e mitigamos riscos como inadimplência, concentração de receita e dependência de poucos clientes." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function GestaoFinanceiraPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Gestão Financeira"
+        title="Sua empresa lucrando"
+        highlight="o que merece"
+        subtitle="Avaliamos o cenário financeiro da sua empresa e desenvolvemos planejamento completo para organização e otimização dos seus recursos. Clareza para tomar decisões assertivas."
+        ctaLabel="Quero diagnóstico financeiro"
+        trackingId="gestao_financeira"
+        icon={PiBankBold}
+      />
+      <ServiceFeatures
+        heading="Como organizamos suas finanças"
+        subheading="Do fluxo de caixa à estratégia de crescimento — visão completa da saúde financeira do seu negócio."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Sua empresa fatura mas não sobra dinheiro?"
+        subheading="Este é um dos problemas mais comuns em pequenas e médias empresas. E tem solução. Fale com a gente."
+        ctaLabel="Resolver meu problema financeiro"
+        trackingId="gestao_financeira"
+        whatsappMessage="Olá! Tenho interesse em Consultoria de Gestão Financeira com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

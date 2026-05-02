@@ -12,6 +12,7 @@ import { CookieConsentBanner } from '@/components/ui/CookieConsentBanner';
 import WhatsButton from '@/components/ui/WhatsButton';
 import GoogleTagManager from '@/components/GoogleTagManager';
 import { Analytics } from "@vercel/analytics/next"
+import { Toaster } from '@/components/ui/toaster'
 
 
 // const geistSans = Geist({
@@ -59,6 +60,7 @@ export default function RootLayout({
                 <BottomFooter />
                 <CookieConsentBanner />
                 <WhatsButton />
+                <Toaster />
               </Container>
             </ProfileProvider>
           </Auth0ProviderWithHistory>

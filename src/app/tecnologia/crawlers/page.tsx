@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiSpiderWebBold, PiCalendarBold, PiBellBold,
+  PiFileCsvBold, PiScalesBold, PiGearSixBold,
+} from "react-icons/pi";
 
-export default function Crawlers() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiSpiderWebBold, title: "Extração de Dados Dinâmicos", description: "Puppeteer e Playwright para sites que carregam conteúdo via JavaScript — redes sociais, portais, sistemas jurídicos e muito mais." },
+  { icon: PiCalendarBold, title: "Coleta Agendada", description: "Configure coletas periódicas automáticas — diária, semanal ou em tempo real. Os dados chegam para você sem esforço manual." },
+  { icon: PiBellBold, title: "Alertas de Mudança", description: "Monitore preços, publicações, editais ou qualquer informação e receba alertas automáticos quando os dados mudarem." },
+  { icon: PiFileCsvBold, title: "Múltiplos Formatos de Exportação", description: "Os dados coletados são entregues em CSV, JSON, Excel ou diretamente no seu banco de dados — no formato que seu time já usa." },
+  { icon: PiScalesBold, title: "Escalabilidade", description: "De centenas a milhões de registros. Arquitetura distribuída com filas de processamento para grandes volumes sem perda de dados." },
+  { icon: PiGearSixBold, title: "Personalização Total", description: "Cada crawler é desenvolvido para o seu caso específico. Lidamos com autenticação, paginação, CAPTCHAs e proteções anti-bot." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function CrawlersPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Web Scraping e Crawlers"
+        title="Dados da web na"
+        highlight="palma da sua mão"
+        subtitle="Automatizamos a coleta de dados públicos para inteligência de mercado, monitoramento de concorrência e tomada de decisões estratégicas baseadas em dados reais."
+        ctaLabel="Quero coletar dados"
+        trackingId="tecnologia_crawlers"
+        icon={PiSpiderWebBold}
+      />
+      <ServiceFeatures
+        heading="O que nossos crawlers fazem"
+        subheading="Soluções robustas que coletam, processam e entregam dados de forma confiável e escalável."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Que dados você precisa coletar?"
+        subheading="Nos conte o seu desafio e nós desenvolvemos a solução de extração mais eficiente para o seu caso."
+        ctaLabel="Descrever meu desafio"
+        trackingId="tecnologia_crawlers"
+        whatsappMessage="Olá! Tenho interesse em desenvolver um crawler/scraper com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

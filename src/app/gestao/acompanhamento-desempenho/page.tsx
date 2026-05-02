@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiPresentationChartBold, PiGaugeBold, PiCalendarCheckBold,
+  PiChartBarBold, PiChatCircleBold, PiArrowBendUpRightBold,
+} from "react-icons/pi";
 
-export default function AcompanhamentoDesempenho() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiGaugeBold, title: "KPIs e Indicadores", description: "Definimos os indicadores mais relevantes para o seu negócio — financeiros, comerciais e operacionais — e os tornamos visíveis para toda a equipe." },
+  { icon: PiPresentationChartBold, title: "Dashboard de Performance", description: "Painel visual atualizado em tempo real com os principais números do negócio para decisões rápidas e embasadas em dados." },
+  { icon: PiCalendarCheckBold, title: "Reuniões de Revisão Periódicas", description: "Encontros estruturados mensais ou quinzenais para analisar resultados, identificar desvios e ajustar o plano de ação." },
+  { icon: PiChartBarBold, title: "Análise de Tendências", description: "Comparamos resultados ao longo do tempo para identificar padrões e antecipar problemas antes que se tornem crises." },
+  { icon: PiChatCircleBold, title: "Feedback Estruturado", description: "Fornecemos relatórios claros e recomendações práticas baseadas nos dados analisados — sem jargão, direto ao ponto." },
+  { icon: PiArrowBendUpRightBold, title: "Planos de Ação", description: "Cada reunião resulta em ações concretas com responsáveis e prazos definidos para garantir que os insights se transformem em resultados." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function AcompanhamentoDesempenhoPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Acompanhamento de Desempenho"
+        title="Decida com dados,"
+        highlight="não com achismo"
+        subtitle="Análises periódicas do desempenho comercial com métricas bem definidas para fornecer feedback contínuo e insights que orientam decisões estratégicas assertivas."
+        ctaLabel="Quero medir melhor meu negócio"
+        trackingId="acompanhamento_desempenho"
+        icon={PiPresentationChartBold}
+      />
+      <ServiceFeatures
+        heading="Como monitoramos seu desempenho"
+        subheading="Um ciclo contínuo de medição, análise e ação que mantém sua empresa sempre evoluindo."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Você sabe exatamente como está seu negócio?"
+        subheading="Muitos gestores tomam decisões com base na percepção, não em dados. Nós mudamos isso."
+        ctaLabel="Começar a medir meu negócio"
+        trackingId="acompanhamento_desempenho"
+        whatsappMessage="Olá! Tenho interesse em Acompanhamento de Desempenho Comercial com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

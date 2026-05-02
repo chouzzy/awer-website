@@ -25,8 +25,9 @@ import { PiCaretLeft, PiCaretRight } from "react-icons/pi";
 // --- Componentes e Dados Locais ---
 import { CustomText } from "@/components/ui/CustomText";
 import { GetStartedMotionButton } from "@/components/ui/MotionButton";
-import { awerServices, Service } from "@/data/services"; // Seus dados de serviço
-import { productCarouselData } from "@/data/productCarousel"; // Seus dados de texto
+import { awerServices, Service } from "@/data/services";
+import { productCarouselData } from "@/data/productCarousel";
+import { trackEvent } from "@/lib/analytics";
 
 // ============================================================================
 //   VARIANTES DE ANIMAÇÃO (Framer Motion)
@@ -144,7 +145,7 @@ function ServiceSlide({ service }: ServiceSlideProps) {
 
                             {/* Botão "Saiba Mais" (visível apenas em desktop neste bloco) */}
                             {!isMobile ? (
-                                <Link href={service.link} target="_blank">
+                                <Link href={service.link} onClick={() => trackEvent({ event: 'service_click', service_id: service.id, service_title: service.title, source: 'product_carousel_desktop' })}>
                                     <Flex width="full" justifyContent={{ base: 'center', md: 'flex-start' }}>
                                         <GetStartedMotionButton
                                             text={productCarouselData.saibaMaisButtonText}
@@ -167,7 +168,7 @@ function ServiceSlide({ service }: ServiceSlideProps) {
 
                             {/* Botão "Saiba Mais" (visível apenas em mobile neste bloco) */}
                             {isMobile ? (
-                                <Link href={service.link} target="_blank">
+                                <Link href={service.link} onClick={() => trackEvent({ event: 'service_click', service_id: service.id, service_title: service.title, source: 'product_carousel_mobile' })}>
                                     <Flex width="full" justifyContent={{ base: 'center', md: 'flex-start' }}>
                                         <GetStartedMotionButton
                                             text={productCarouselData.saibaMaisButtonText}
