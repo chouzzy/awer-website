@@ -31,6 +31,7 @@ export default function AIPage() {
         ctaLabel="Explorar soluções de IA"
         trackingId="tecnologia_ai"
         icon={PiBrainBold}
+        bgImage="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="O que a IA pode fazer pelo seu negócio"

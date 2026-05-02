@@ -7,7 +7,7 @@ import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
 import { ContactUs } from "@/components/layout/botrt/Contact";
 import {
   PiPresentationChartBold, PiGaugeBold, PiCalendarCheckBold,
-  PiChartBarBold, PiChatCircleBold, PiArrowBendUpRightBold,
+  PiChartBarBold, PiChatCircleBold, PiArrowBendRightUpBold,
 } from "react-icons/pi";
 
 const features: Feature[] = [
@@ -16,7 +16,7 @@ const features: Feature[] = [
   { icon: PiCalendarCheckBold, title: "Reuniões de Revisão Periódicas", description: "Encontros estruturados mensais ou quinzenais para analisar resultados, identificar desvios e ajustar o plano de ação." },
   { icon: PiChartBarBold, title: "Análise de Tendências", description: "Comparamos resultados ao longo do tempo para identificar padrões e antecipar problemas antes que se tornem crises." },
   { icon: PiChatCircleBold, title: "Feedback Estruturado", description: "Fornecemos relatórios claros e recomendações práticas baseadas nos dados analisados — sem jargão, direto ao ponto." },
-  { icon: PiArrowBendUpRightBold, title: "Planos de Ação", description: "Cada reunião resulta em ações concretas com responsáveis e prazos definidos para garantir que os insights se transformem em resultados." },
+  { icon: PiArrowBendRightUpBold, title: "Planos de Ação", description: "Cada reunião resulta em ações concretas com responsáveis e prazos definidos para garantir que os insights se transformem em resultados." },
 ];
 
 export default function AcompanhamentoDesempenhoPage() {
@@ -30,6 +30,7 @@ export default function AcompanhamentoDesempenhoPage() {
         ctaLabel="Quero medir melhor meu negócio"
         trackingId="acompanhamento_desempenho"
         icon={PiPresentationChartBold}
+        bgImage="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="Como monitoramos seu desempenho"

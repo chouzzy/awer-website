@@ -30,6 +30,7 @@ export default function ComercialVendasPage() {
         ctaLabel="Alavancar minhas vendas"
         trackingId="comercial_vendas"
         icon={PiHandshakeBold}
+        bgImage="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="Como aceleramos suas vendas"

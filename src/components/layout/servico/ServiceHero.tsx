@@ -15,6 +15,8 @@ interface ServiceHeroProps {
   ctaLabel?: string;
   trackingId: string;
   icon?: IconType;
+  bgImage: string;
+  overlayOpacity?: number;
 }
 
 const containerVariants: Variants = {
@@ -35,6 +37,8 @@ export function ServiceHero({
   ctaLabel = "Falar com um especialista",
   trackingId,
   icon,
+  bgImage,
+  overlayOpacity = 0.72,
 }: ServiceHeroProps) {
   const MotionVStack = motion(VStack);
   const MotionHeading = motion(Heading);
@@ -45,31 +49,43 @@ export function ServiceHero({
     <Flex
       as="section"
       w="100%"
-      minH={{ base: "80vh", md: "90vh" }}
+      minH={{ base: "85vh", md: "92vh" }}
       align="center"
       justify="center"
       px={{ base: 6, md: 16 }}
       textAlign="center"
       position="relative"
       overflow="hidden"
+      bgImage={`url(${bgImage})`}
+      bgSize="cover"
+      bgPos="center"
+      bgRepeat="no-repeat"
     >
-      {/* Glow decorativo */}
+      {/* Overlay escuro sobre a foto */}
       <Box
         position="absolute"
-        top="20%"
+        inset={0}
+        bg={`rgba(0, 0, 0, ${overlayOpacity})`}
+        zIndex={0}
+      />
+
+      {/* Glow brand sutil no topo */}
+      <Box
+        position="absolute"
+        top="0"
         left="50%"
         transform="translateX(-50%)"
-        w={{ base: "300px", md: "600px" }}
-        h={{ base: "300px", md: "600px" }}
-        borderRadius="full"
+        w={{ base: "400px", md: "800px" }}
+        h="2px"
         bg="brand.500"
-        opacity={0.06}
-        filter="blur(80px)"
+        opacity={0.6}
+        filter="blur(6px)"
+        zIndex={1}
         pointerEvents="none"
       />
 
       <MotionVStack
-        zIndex={1}
+        zIndex={2}
         maxW="4xl"
         gap={6}
         variants={containerVariants}
@@ -78,13 +94,21 @@ export function ServiceHero({
       >
         {(tagline || icon) && (
           <MotionBox variants={itemVariants}>
-            <Flex align="center" justify="center" gap={2}
+            <Flex
+              align="center" justify="center" gap={2}
               px={4} py={2} borderRadius="full"
-              bg="whiteAlpha.100" border="1px solid" borderColor="whiteAlpha.200"
+              bg="whiteAlpha.150"
+              border="1px solid"
+              borderColor="whiteAlpha.300"
+              backdropFilter="blur(8px)"
               display="inline-flex"
             >
-              {icon && <Icon as={icon} color="brand.500" boxSize={4} />}
-              {tagline && <Text color="brand.400" fontSize="sm" fontWeight="semibold" letterSpacing="wider" textTransform="uppercase">{tagline}</Text>}
+              {icon && <Icon as={icon} color="brand.400" boxSize={4} />}
+              {tagline && (
+                <Text color="brand.300" fontSize="sm" fontWeight="semibold" letterSpacing="wider" textTransform="uppercase">
+                  {tagline}
+                </Text>
+              )}
             </Flex>
           </MotionBox>
         )}
@@ -95,18 +119,20 @@ export function ServiceHero({
           fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }}
           fontWeight="extrabold"
           lineHeight="1.1"
-          color="ghostWhite"
+          color="white"
+          textShadow="0 2px 20px rgba(0,0,0,0.5)"
         >
           {title}{" "}
-          <Box as="span" color="brand.500">{highlight}</Box>
+          <Box as="span" color="brand.400">{highlight}</Box>
         </MotionHeading>
 
         <MotionText
           variants={itemVariants}
           fontSize={{ base: "lg", md: "xl" }}
-          color="gray.400"
+          color="whiteAlpha.800"
           maxW="2xl"
           lineHeight="tall"
+          textShadow="0 1px 10px rgba(0,0,0,0.4)"
         >
           {subtitle}
         </MotionText>
@@ -127,7 +153,7 @@ export function ServiceHero({
               fontSize="lg"
               fontWeight="bold"
               borderRadius="xl"
-              _hover={{ bg: "brand.600", transform: "translateY(-2px)", boxShadow: "0 8px 30px rgba(255, 95, 94, 0.35)" }}
+              _hover={{ bg: "brand.600", transform: "translateY(-2px)", boxShadow: "0 8px 30px rgba(255, 95, 94, 0.4)" }}
               transition="all 0.3s ease"
             >
               <Icon as={PiWhatsappLogoBold} mr={2} boxSize={5} />

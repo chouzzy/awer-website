@@ -7,13 +7,13 @@ import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
 import { ContactUs } from "@/components/layout/botrt/Contact";
 import {
   PiMagnifyingGlassBold, PiMapPinBold, PiEnvelopeBold,
-  PiPhoneBold, PiLinkedinLogoBold, PiChartPieBold,
+  PiPhoneBold, PiShareNetworkBold, PiChartPieBold,
 } from "react-icons/pi";
 
 const features: Feature[] = [
   { icon: PiMagnifyingGlassBold, title: "ICP e Persona", description: "Definimos com precisão quem é seu cliente ideal — segmento, porte, dores, comportamentos e critérios de compra." },
   { icon: PiMapPinBold, title: "Mapeamento de Mercado", description: "Identificamos e qualificamos potenciais clientes no seu mercado-alvo com base em dados reais e critérios objetivos." },
-  { icon: PiLinkedinLogoBold, title: "Prospecção Digital", description: "Estratégias de outbound via LinkedIn, email e outros canais digitais para alcançar decisores de forma personalizada e escalável." },
+  { icon: PiShareNetworkBold, title: "Prospecção Digital", description: "Estratégias de outbound via LinkedIn, email e outros canais digitais para alcançar decisores de forma personalizada e escalável." },
   { icon: PiEnvelopeBold, title: "Cadências de Prospecção", description: "Criamos sequências de contato multicanal com scripts personalizados para cada etapa — do primeiro contato até a reunião marcada." },
   { icon: PiPhoneBold, title: "Scripts e Abordagens", description: "Desenvolvemos discursos de vendas eficazes para ligações, emails e mensagens, testados e otimizados para o seu mercado." },
   { icon: PiChartPieBold, title: "Métricas de Prospecção", description: "Acompanhamos taxas de conversão em cada etapa para identificar gargalos e otimizar continuamente o processo de aquisição." },
@@ -30,6 +30,7 @@ export default function ProspeccaoPage() {
         ctaLabel="Quero mais clientes"
         trackingId="prospeccao"
         icon={PiMagnifyingGlassBold}
+        bgImage="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="Nossa metodologia de prospecção"

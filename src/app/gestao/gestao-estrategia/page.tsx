@@ -30,6 +30,7 @@ export default function GestaoEstrategiaPage() {
         ctaLabel="Quero um diagnóstico gratuito"
         trackingId="gestao_estrategia"
         icon={PiChartLineUpBold}
+        bgImage="https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="Como estruturamos sua estratégia"

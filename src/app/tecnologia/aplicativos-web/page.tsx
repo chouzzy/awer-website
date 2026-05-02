@@ -30,6 +30,7 @@ export default function AplicativosWebPage() {
         ctaLabel="Contar meu projeto"
         trackingId="tecnologia_apps_web"
         icon={PiDevicesBold}
+        bgImage="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="Tecnologias que usamos"

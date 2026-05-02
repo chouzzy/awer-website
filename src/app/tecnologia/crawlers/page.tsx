@@ -30,6 +30,7 @@ export default function CrawlersPage() {
         ctaLabel="Quero coletar dados"
         trackingId="tecnologia_crawlers"
         icon={PiNetworkBold}
+        bgImage="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="O que nossos crawlers fazem"

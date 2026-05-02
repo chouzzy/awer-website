@@ -98,7 +98,7 @@ export default function TecnologiaPage() {
       <MotionFlex
         as="section"
         w="100%"
-        minH={{ base: "75vh", md: "85vh" }}
+        minH={{ base: "85vh", md: "92vh" }}
         align="center"
         justify="center"
         px={{ base: 6, md: 16 }}
@@ -107,10 +107,16 @@ export default function TecnologiaPage() {
         gap={6}
         position="relative"
         overflow="hidden"
+        bgImage="url(https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80&auto=format&fit=crop)"
+        bgSize="cover"
+        bgPos="center"
+        bgRepeat="no-repeat"
         variants={heroVariants}
         initial="hidden"
         animate="visible"
       >
+        {/* Overlay escuro */}
+        <Box position="absolute" inset={0} bg="rgba(0,0,0,0.72)" zIndex={0} />
         <Box
           position="absolute"
           top="30%"
@@ -123,12 +129,14 @@ export default function TecnologiaPage() {
           opacity={0.05}
           filter="blur(100px)"
           pointerEvents="none"
+          zIndex={1}
         />
 
-        <MotionBox variants={heroItem}>
+        <MotionBox variants={heroItem} zIndex={2}>
           <Flex align="center" justify="center" gap={2}
             px={4} py={2} borderRadius="full"
-            bg="whiteAlpha.100" border="1px solid" borderColor="whiteAlpha.200"
+            bg="whiteAlpha.150" border="1px solid" borderColor="whiteAlpha.300"
+            backdropFilter="blur(8px)"
             display="inline-flex"
           >
             <Icon as={PiCodeBold} color="brand.500" boxSize={4} />
@@ -141,27 +149,31 @@ export default function TecnologiaPage() {
         <MotionHeading
           as="h1"
           variants={heroItem}
+          zIndex={2}
           fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }}
           fontWeight="extrabold"
           lineHeight="1.1"
-          color="ghostWhite"
+          color="white"
           maxW="4xl"
+          textShadow="0 2px 20px rgba(0,0,0,0.5)"
         >
           Tecnologia sob medida para{" "}
-          <Box as="span" color="brand.500">o seu negócio</Box>
+          <Box as="span" color="brand.400">o seu negócio</Box>
         </MotionHeading>
 
         <MotionText
           variants={heroItem}
-          color="gray.400"
+          zIndex={2}
+          color="whiteAlpha.800"
           fontSize={{ base: "lg", md: "xl" }}
           maxW="2xl"
           lineHeight="tall"
+          textShadow="0 1px 10px rgba(0,0,0,0.4)"
         >
           Da automação inteligente ao e-commerce de alta performance. Construímos soluções digitais que transformam processos e impulsionam resultados.
         </MotionText>
 
-        <MotionBox variants={heroItem} pt={2}>
+        <MotionBox variants={heroItem} pt={2} zIndex={2}>
           <NextLink
             href={whatsappLink("Olá! Tenho interesse nas soluções de tecnologia da Awer.")}
             target="_blank"

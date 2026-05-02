@@ -6,7 +6,7 @@ import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFea
 import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
 import { ContactUs } from "@/components/layout/botrt/Contact";
 import {
-  PiBankBold, PiReceiptBold, PiScalesBold,
+  PiBankBold, PiReceiptBold, PiScaleBold,
   PiChartPieBold, PiArrowsLeftRightBold, PiWarningBold,
 } from "react-icons/pi";
 
@@ -14,7 +14,7 @@ const features: Feature[] = [
   { icon: PiArrowsLeftRightBold, title: "Gestão de Fluxo de Caixa", description: "Controle de entradas e saídas com projeções de curto e médio prazo para garantir que sua empresa nunca fique sem caixa." },
   { icon: PiReceiptBold, title: "DRE e Análise de Lucratividade", description: "Demonstrativo de Resultado estruturado para entender quais produtos, serviços ou clientes são realmente lucrativos." },
   { icon: PiChartPieBold, title: "Planejamento Orçamentário", description: "Orçamento anual detalhado com metas financeiras realistas e controle de desvios mês a mês." },
-  { icon: PiScalesBold, title: "Precificação e Margens", description: "Definição de preços e margens que garantem lucratividade real, considerando todos os custos diretos e indiretos." },
+  { icon: PiScaleBold, title: "Precificação e Margens", description: "Definição de preços e margens que garantem lucratividade real, considerando todos os custos diretos e indiretos." },
   { icon: PiBankBold, title: "Relacionamento com Bancos", description: "Orientação para captação de crédito, negociação de taxas e estruturação de dívidas de forma sustentável." },
   { icon: PiWarningBold, title: "Gestão de Riscos Financeiros", description: "Identificamos e mitigamos riscos como inadimplência, concentração de receita e dependência de poucos clientes." },
 ];
@@ -30,6 +30,7 @@ export default function GestaoFinanceiraPage() {
         ctaLabel="Quero diagnóstico financeiro"
         trackingId="gestao_financeira"
         icon={PiBankBold}
+        bgImage="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="Como organizamos suas finanças"

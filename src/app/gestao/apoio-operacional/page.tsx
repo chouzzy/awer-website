@@ -30,6 +30,7 @@ export default function ApoioOperacionalPage() {
         ctaLabel="Organizar minha operação"
         trackingId="apoio_operacional"
         icon={PiGearSixBold}
+        bgImage="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="Como organizamos sua operação"

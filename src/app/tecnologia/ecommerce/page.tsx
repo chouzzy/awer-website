@@ -30,6 +30,7 @@ export default function EcommercePage() {
         ctaLabel="Quero minha loja"
         trackingId="tecnologia_ecommerce"
         icon={PiShoppingCartBold}
+        bgImage="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1920&q=80&auto=format&fit=crop"
       />
       <ServiceFeatures
         heading="Por que headless é melhor"
