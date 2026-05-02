@@ -6,12 +6,12 @@ import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFea
 import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
 import { ContactUs } from "@/components/layout/botrt/Contact";
 import {
-  PiSpiderWebBold, PiCalendarBold, PiBellBold,
+  PiNetworkBold, PiCalendarBold, PiBellBold,
   PiFileCsvBold, PiScalesBold, PiGearSixBold,
 } from "react-icons/pi";
 
 const features: Feature[] = [
-  { icon: PiSpiderWebBold, title: "Extração de Dados Dinâmicos", description: "Puppeteer e Playwright para sites que carregam conteúdo via JavaScript — redes sociais, portais, sistemas jurídicos e muito mais." },
+  { icon: PiNetworkBold, title: "Extração de Dados Dinâmicos", description: "Puppeteer e Playwright para sites que carregam conteúdo via JavaScript — redes sociais, portais, sistemas jurídicos e muito mais." },
   { icon: PiCalendarBold, title: "Coleta Agendada", description: "Configure coletas periódicas automáticas — diária, semanal ou em tempo real. Os dados chegam para você sem esforço manual." },
   { icon: PiBellBold, title: "Alertas de Mudança", description: "Monitore preços, publicações, editais ou qualquer informação e receba alertas automáticos quando os dados mudarem." },
   { icon: PiFileCsvBold, title: "Múltiplos Formatos de Exportação", description: "Os dados coletados são entregues em CSV, JSON, Excel ou diretamente no seu banco de dados — no formato que seu time já usa." },
@@ -29,7 +29,7 @@ export default function CrawlersPage() {
         subtitle="Automatizamos a coleta de dados públicos para inteligência de mercado, monitoramento de concorrência e tomada de decisões estratégicas baseadas em dados reais."
         ctaLabel="Quero coletar dados"
         trackingId="tecnologia_crawlers"
-        icon={PiSpiderWebBold}
+        icon={PiNetworkBold}
       />
       <ServiceFeatures
         heading="O que nossos crawlers fazem"

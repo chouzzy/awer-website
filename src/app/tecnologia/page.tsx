@@ -8,7 +8,7 @@ import { trackEvent } from "@/lib/analytics";
 import { whatsappLink } from "@/utils";
 import {
   PiRobotBold, PiGlobeBold, PiShoppingCartBold,
-  PiSpiderWebBold, PiDevicesBold, PiBrainBold,
+  PiNetworkBold, PiDevicesBold, PiBrainBold,
   PiArrowRightBold, PiWhatsappLogoBold, PiCodeBold,
 } from "react-icons/pi";
 
@@ -47,7 +47,7 @@ const services = [
     badgeColor: "green.400",
   },
   {
-    icon: PiSpiderWebBold,
+    icon: PiNetworkBold,
     title: "Crawlers e Web Scraping",
     description: "Coleta automatizada de dados públicos da web com Puppeteer/Playwright para inteligência de mercado.",
     href: "/tecnologia/crawlers",
