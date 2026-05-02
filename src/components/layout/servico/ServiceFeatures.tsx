@@ -69,21 +69,21 @@ export function ServiceFeatures({ heading, subheading, features }: ServiceFeatur
         viewport={{ once: true, amount: 0.2 }}
       >
         {features.map((feat, i) => (
-          <MotionBox
-            key={i}
-            variants={itemVariants}
-            p={6}
-            bg="rgba(15, 17, 21, 0.6)"
-            border="1px solid"
-            borderColor="whiteAlpha.100"
-            borderRadius="2xl"
-            _hover={{
-              borderColor: "brand.500",
-              boxShadow: "0 4px 24px rgba(255, 95, 94, 0.12)",
-              transform: "translateY(-4px)",
-            }}
-            transition="all 0.25s ease"
-          >
+          <MotionBox key={i} variants={itemVariants}>
+            <Box
+              p={6}
+              bg="rgba(15, 17, 21, 0.6)"
+              border="1px solid"
+              borderColor="whiteAlpha.100"
+              borderRadius="2xl"
+              h="100%"
+              _hover={{
+                borderColor: "brand.500",
+                boxShadow: "0 4px 24px rgba(255, 95, 94, 0.12)",
+                transform: "translateY(-4px)",
+              }}
+              transition="all 0.25s ease"
+            >
             <Flex
               align="center"
               justify="center"
@@ -101,6 +101,7 @@ export function ServiceFeatures({ heading, subheading, features }: ServiceFeatur
             <Text color="gray.400" fontSize="sm" lineHeight="tall">
               {feat.description}
             </Text>
+            </Box>
           </MotionBox>
         ))}
       </MotionGrid>
