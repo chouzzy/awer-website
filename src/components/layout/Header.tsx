@@ -25,6 +25,7 @@ import { headerData } from "@/data/header";
 import { UserAvatar } from "./UserAvatar";
 import { useProfile } from "@/contexts/ProfileContext"; // 1. Importa o nosso hook de perfil
 import { PiHeadsetBold } from "react-icons/pi";
+import { trackEvent } from "@/lib/analytics";
 
 // ============================================================================
 //   VARIANTES DE ANIMAÇÃO (Framer Motion)
@@ -143,7 +144,12 @@ export function Header() {
 
                     {/* Avatar ou Login */}
                     {isAuthenticated ? <UserAvatar /> : (
-                        <Button onClick={() => loginWithRedirect()} /* ...estilos... */>
+                        <Button
+                            onClick={() => {
+                                trackEvent({ event: 'login_click', source: 'header' });
+                                loginWithRedirect();
+                            }}
+                        >
                             Entrar
                         </Button>
                     )}

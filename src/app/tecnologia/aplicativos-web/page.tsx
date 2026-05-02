@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiDevicesBold, PiDatabaseBold, PiLockKeyBold,
+  PiCloudBold, PiCodeBold, PiArrowsClockwiseBold,
+} from "react-icons/pi";
 
-export default function AplicativosWeb() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiCodeBold, title: "Frontend Next.js", description: "Interfaces modernas, responsivas e acessíveis com React e Next.js. SSR, SSG e rotas dinâmicas para a melhor performance e SEO." },
+  { icon: PiDatabaseBold, title: "Backend Node.js + MongoDB", description: "APIs robustas, seguras e escaláveis. MongoDB com Prisma para modelagem flexível de dados, com suporte a PostgreSQL e outros bancos." },
+  { icon: PiLockKeyBold, title: "Autenticação Segura", description: "Integramos Auth0, NextAuth e JWT para fluxos de login seguros, incluindo OAuth com Google, GitHub e outros provedores." },
+  { icon: PiCloudBold, title: "Deploy e Infraestrutura", description: "Publicação na Vercel, AWS ou qualquer nuvem. Configuramos CI/CD, domínios, SSL e monitoramento de performance." },
+  { icon: PiArrowsClockwiseBold, title: "Integrações de APIs", description: "Conectamos seu sistema a qualquer serviço: Stripe, WhatsApp, ERPs, CRMs e muito mais via REST ou GraphQL." },
+  { icon: PiDevicesBold, title: "PWA e Mobile", description: "Aplicações web que funcionam como apps nativos no celular, com suporte offline e notificações push." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function AplicativosWebPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Aplicações Web"
+        title="Sistemas web de alta"
+        highlight="performance e escala"
+        subtitle="Do conceito ao deploy, construímos aplicações completas com as tecnologias mais modernas. Frontend, backend, banco de dados e infraestrutura sob medida para o seu negócio."
+        ctaLabel="Contar meu projeto"
+        trackingId="tecnologia_apps_web"
+        icon={PiDevicesBold}
+      />
+      <ServiceFeatures
+        heading="Tecnologias que usamos"
+        subheading="Stack moderna e battle-tested, escolhida para garantir velocidade de desenvolvimento e robustez em produção."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Tem uma ideia de sistema?"
+        subheading="Converse com nossa equipe técnica. Avaliamos seu projeto gratuitamente e sugerimos a melhor arquitetura."
+        ctaLabel="Avaliar meu projeto"
+        trackingId="tecnologia_apps_web"
+        whatsappMessage="Olá! Tenho interesse em desenvolver uma aplicação web com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

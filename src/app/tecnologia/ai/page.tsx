@@ -1,84 +1,50 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiChatCircleBold, PiChartBarBold, PiRobotBold,
+  PiFileTextBold, PiPlugsBold, PiLightningBold,
+} from "react-icons/pi";
+import { PiBrainBold } from "react-icons/pi";
 
-export default function AI() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiChatCircleBold, title: "Chatbots Inteligentes", description: "Atendimento 24/7 com respostas personalizadas e aprendizado contínuo, reduzindo custos operacionais e melhorando a experiência do cliente." },
+  { icon: PiChartBarBold, title: "Análise de Dados com IA", description: "Transforme grandes volumes de dados em insights acionáveis. Identificamos padrões, tendências e oportunidades que passariam despercebidos." },
+  { icon: PiRobotBold, title: "Automação Inteligente", description: "Eliminamos tarefas repetitivas com agentes de IA que executam fluxos complexos de forma autônoma, liberando sua equipe para o que importa." },
+  { icon: PiFileTextBold, title: "Geração de Conteúdo", description: "Criamos textos, relatórios, resumos e documentos automaticamente, mantendo a voz e o tom da sua marca com qualidade profissional." },
+  { icon: PiPlugsBold, title: "Integração com APIs de IA", description: "Implementamos modelos de ponta como Gemini, OpenAI, Claude e outros dentro dos seus sistemas e fluxos de trabalho existentes." },
+  { icon: PiLightningBold, title: "Prototipagem Rápida", description: "Da ideia ao MVP em dias. Testamos hipóteses rapidamente com IA generativa antes de investir em desenvolvimento completo." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function AIPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Inteligência Artificial"
+        title="Automatize o futuro com"
+        highlight="Inteligência Artificial"
+        subtitle="Integramos IA nos seus processos para criar chatbots, analisar dados e gerar eficiência real. Modelos como Gemini, OpenAI e Claude trabalhando para o seu negócio."
+        ctaLabel="Explorar soluções de IA"
+        trackingId="tecnologia_ai"
+        icon={PiBrainBold}
+      />
+      <ServiceFeatures
+        heading="O que a IA pode fazer pelo seu negócio"
+        subheading="Soluções práticas e implementáveis que geram resultado desde o primeiro dia."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Pronto para implementar IA?"
+        subheading="Converse com nossa equipe e descubra quais processos da sua empresa podem ser automatizados com IA."
+        ctaLabel="Quero implementar IA"
+        trackingId="tecnologia_ai"
+        whatsappMessage="Olá! Tenho interesse em implementar Inteligência Artificial nos processos da minha empresa."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

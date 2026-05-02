@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiTargetBold, PiLightningBold, PiChartLineBold,
+  PiPaintBrushBold, PiGlobeBold, PiArrowsClockwiseBold,
+} from "react-icons/pi";
 
-export default function LandingPages() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiTargetBold, title: "Foco em Conversão", description: "Cada elemento da página é pensado para converter visitantes em leads ou clientes. Design e copywriting orientados a resultado." },
+  { icon: PiLightningBold, title: "Performance Máxima", description: "Google PageSpeed Score 90+. Carregamento ultrarrápido que reduz a taxa de rejeição e melhora o ranking no Google." },
+  { icon: PiPaintBrushBold, title: "Design Profissional", description: "Visual impactante que transmite credibilidade e confiança, alinhado à identidade da sua marca e ao público-alvo da campanha." },
+  { icon: PiChartLineBold, title: "Analytics Completo", description: "GTM, GA4 e tracking de conversões configurados para medir o ROI real de cada campanha com precisão." },
+  { icon: PiArrowsClockwiseBold, title: "Integrações de Marketing", description: "HubSpot, RD Station, Mailchimp, ActiveCampaign e outros. Leads capturados automaticamente na sua ferramenta favorita." },
+  { icon: PiGlobeBold, title: "SEO e Ads Ready", description: "Estrutura técnica otimizada para Google Ads e Meta Ads. Quality Score alto e custo por clique reduzido." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function LandingPagesPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Landing Pages"
+        title="Páginas que"
+        highlight="geram resultados"
+        subtitle="Landing pages de alta conversão para campanhas, lançamentos e captação de leads. Design profissional, performance superior e tracking completo — tudo que uma boa campanha precisa."
+        ctaLabel="Quero uma landing page"
+        trackingId="tecnologia_landing_pages"
+        icon={PiGlobeBold}
+      />
+      <ServiceFeatures
+        heading="O que faz uma landing page converter"
+        subheading="A combinação certa de design, copywriting, performance e analytics é o que separa uma página que converte de uma que só existe."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Tem uma campanha planejada?"
+        subheading="Conte para nós o objetivo da sua campanha. Criamos a landing page ideal para maximizar seus resultados."
+        ctaLabel="Falar sobre minha campanha"
+        trackingId="tecnologia_landing_pages"
+        whatsappMessage="Olá! Tenho interesse em criar uma landing page de alta conversão com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

@@ -28,6 +28,7 @@ import { PiCheckCircleFill } from "react-icons/pi";
 
 // --- Componentes Locais ---
 import { TermsModal } from '@/components/ui/TermsModal';
+import { trackEvent } from '@/lib/analytics';
 
 
 // ============================================================================
@@ -132,7 +133,11 @@ export function BotrtPlans() {
         setSelectedPlan(priceId);
         setIsLoading(true);
 
+        const planName = plansData.find(p => p.priceId === priceId)?.name ?? 'unknown';
+        trackEvent({ event: 'plan_select', plan_name: planName, price_id: priceId });
+
         if (!isAuthenticated) {
+            trackEvent({ event: 'login_click', source: 'planos_botrt', plan_name: planName });
             await loginWithRedirect({
                 appState: {
                     returnTo: '/tecnologia/botrt',
@@ -154,6 +159,7 @@ export function BotrtPlans() {
             });
             const data = await response.json();
             if (response.ok) {
+                trackEvent({ event: 'checkout_start', plan_name: planName, price_id: priceId });
                 window.location.href = data.url;
             } else {
                 throw new Error(data.error || 'Falha ao criar a sessão de checkout.');

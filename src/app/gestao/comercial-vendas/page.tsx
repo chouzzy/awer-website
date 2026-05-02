@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiHandshakeBold, PiChartBarBold, PiFunnelBold,
+  PiUsersBold, PiClipboardBold, PiTrendUpBold,
+} from "react-icons/pi";
 
-export default function ComercialEVendas() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiFunnelBold, title: "Estruturação do Funil de Vendas", description: "Mapeamos e otimizamos cada etapa do processo comercial, desde a prospecção até o fechamento e pós-venda." },
+  { icon: PiChartBarBold, title: "Definição de Metas", description: "Estabelecemos metas de vendas realistas e desafiadoras, baseadas em dados históricos e potencial de mercado." },
+  { icon: PiClipboardBold, title: "Playbook de Vendas", description: "Documentamos o processo de vendas ideal da sua empresa para garantir consistência e facilitar o onboarding de novos vendedores." },
+  { icon: PiUsersBold, title: "Gestão do Time Comercial", description: "Estruturamos papéis, responsabilidades e indicadores de performance para o time de vendas trabalhar com mais foco." },
+  { icon: PiTrendUpBold, title: "Estratégias de Crescimento", description: "Identificamos oportunidades de expansão — novos mercados, produtos, canais de venda e parcerias estratégicas." },
+  { icon: PiHandshakeBold, title: "CRM e Ferramentas", description: "Implementamos e configuramos CRMs para automatizar tarefas, centralizar informações e aumentar a produtividade do time." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function ComercialVendasPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Comercial e Vendas"
+        title="Venda mais com"
+        highlight="processo e previsibilidade"
+        subtitle="Estruturamos seu planejamento de vendas, definimos metas realistas e implementamos estratégias que impulsionam o sucesso comercial de forma sustentável."
+        ctaLabel="Alavancar minhas vendas"
+        trackingId="comercial_vendas"
+        icon={PiHandshakeBold}
+      />
+      <ServiceFeatures
+        heading="Como aceleramos suas vendas"
+        subheading="Abordagem sistemática que transforma o comercial numa máquina previsível de geração de receita."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Suas vendas estão abaixo do potencial?"
+        subheading="Um processo comercial bem estruturado pode dobrar seus resultados sem necessariamente aumentar sua equipe."
+        ctaLabel="Descobrir meu potencial de vendas"
+        trackingId="comercial_vendas"
+        whatsappMessage="Olá! Tenho interesse em Consultoria Comercial e de Vendas com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

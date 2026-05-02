@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiGearSixBold, PiArrowsClockwiseBold, PiListChecksBold,
+  PiRobotBold, PiUsersThreeBold, PiClockBold,
+} from "react-icons/pi";
 
-export default function ApoioOperacional() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiListChecksBold, title: "Mapeamento de Processos", description: "Documentamos todos os processos operacionais da empresa para identificar gargalos, redundâncias e oportunidades de melhoria." },
+  { icon: PiArrowsClockwiseBold, title: "Otimização de Fluxos", description: "Redesenhamos os processos para eliminar etapas desnecessárias, reduzir erros e aumentar a velocidade de entrega." },
+  { icon: PiRobotBold, title: "Identificação de Automações", description: "Mapeamos quais tarefas repetitivas podem ser automatizadas com tecnologia, liberando sua equipe para atividades de maior valor." },
+  { icon: PiClockBold, title: "Gestão do Tempo", description: "Implementamos metodologias para melhorar a gestão do tempo da equipe, priorizando o que realmente impacta os resultados." },
+  { icon: PiUsersThreeBold, title: "Treinamento da Equipe", description: "Capacitamos sua equipe nos novos processos e ferramentas implementados para garantir adoção e resultados duradouros." },
+  { icon: PiGearSixBold, title: "Ferramentas de Gestão", description: "Implantamos e configuramos ferramentas como Notion, Trello, Monday ou similares para organizar e centralizar as operações." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function ApoioOperacionalPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Apoio Operacional"
+        title="Operação eficiente que"
+        highlight="escala sem caos"
+        subtitle="Identificamos oportunidades de automação e facilitamos processos dentro das suas atividades operacionais, aumentando a eficiência e reduzindo custos com mais qualidade."
+        ctaLabel="Organizar minha operação"
+        trackingId="apoio_operacional"
+        icon={PiGearSixBold}
+      />
+      <ServiceFeatures
+        heading="Como organizamos sua operação"
+        subheading="Um processo de diagnóstico, mapeamento e implementação que transforma o caos operacional em rotina eficiente."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Sua empresa travou no crescimento?"
+        subheading="Muitas vezes o gargalo não é falta de clientes, mas falta de estrutura operacional para atender a demanda."
+        ctaLabel="Estruturar minha operação"
+        trackingId="apoio_operacional"
+        whatsappMessage="Olá! Tenho interesse em Consultoria para Apoio Operacional com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

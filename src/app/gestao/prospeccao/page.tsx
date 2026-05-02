@@ -1,84 +1,49 @@
-// src/app/consultoria/page.tsx
 'use client';
 
-import { Flex, Heading, Text, Icon, VStack } from "@chakra-ui/react";
-import { motion, Variants } from 'framer-motion';
-import { PiWrench } from "react-icons/pi"; // Ícone de ferramenta, apropriado para "construção"
+import { Flex } from "@chakra-ui/react";
+import { ServiceHero } from "@/components/layout/servico/ServiceHero";
+import { ServiceFeatures, Feature } from "@/components/layout/servico/ServiceFeatures";
+import { ServiceCTA } from "@/components/layout/servico/ServiceCTA";
+import { ContactUs } from "@/components/layout/botrt/Contact";
+import {
+  PiMagnifyingGlassBold, PiMapPinBold, PiEnvelopeBold,
+  PiPhoneBold, PiLinkedinLogoBold, PiChartPieBold,
+} from "react-icons/pi";
 
-export default function Prospecção() {
-    // Componentes com animação
-    const MotionFlex = motion(Flex);
-    const MotionHeading = motion(Heading);
-    const MotionText = motion(Text);
-    const MotionIcon = motion(Icon);
+const features: Feature[] = [
+  { icon: PiMagnifyingGlassBold, title: "ICP e Persona", description: "Definimos com precisão quem é seu cliente ideal — segmento, porte, dores, comportamentos e critérios de compra." },
+  { icon: PiMapPinBold, title: "Mapeamento de Mercado", description: "Identificamos e qualificamos potenciais clientes no seu mercado-alvo com base em dados reais e critérios objetivos." },
+  { icon: PiLinkedinLogoBold, title: "Prospecção Digital", description: "Estratégias de outbound via LinkedIn, email e outros canais digitais para alcançar decisores de forma personalizada e escalável." },
+  { icon: PiEnvelopeBold, title: "Cadências de Prospecção", description: "Criamos sequências de contato multicanal com scripts personalizados para cada etapa — do primeiro contato até a reunião marcada." },
+  { icon: PiPhoneBold, title: "Scripts e Abordagens", description: "Desenvolvemos discursos de vendas eficazes para ligações, emails e mensagens, testados e otimizados para o seu mercado." },
+  { icon: PiChartPieBold, title: "Métricas de Prospecção", description: "Acompanhamos taxas de conversão em cada etapa para identificar gargalos e otimizar continuamente o processo de aquisição." },
+];
 
-    // Variantes de animação para a entrada dos elementos
-    const containerVariants: Variants  = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2, // Anima os filhos em sequência
-                delayChildren: 0.1,
-            },
-        },
-    };
-
-    const itemVariants: Variants  = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        },
-    };
-
-    return (
-        // Container principal que centraliza o conteúdo na tela
-        <MotionFlex
-            w="100%"
-            minH="70vh" // Garante que ocupe a maior parte da tela verticalmente
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-            px={4}
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <VStack gap={6}>
-                {/* Ícone animado */}
-                <MotionIcon
-                    as={PiWrench}
-                    boxSize={{ base: 16, md: 24 }}
-                    color="brand.500" // Cor do seu tema
-                    variants={itemVariants}
-                />
-
-                {/* Título Principal */}
-                <MotionHeading
-                    as="h1"
-                    fontSize={{ base: '3xl', md: '5xl' }}
-                    fontWeight="bold"
-                    color="textPrimary" // Cor do seu tema
-                    variants={itemVariants}
-                >
-                    Página em Construção
-                </MotionHeading>
-
-                {/* Texto de Apoio */}
-                <MotionText
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    color="textSecondary" // Cor do seu tema
-                    maxW="xl"
-                    variants={itemVariants}
-                >
-                    Estamos trabalhando para trazer novidades e soluções incríveis para você. Volte em breve para conferir!
-                </MotionText>
-            </VStack>
-        </MotionFlex>
-    );
+export default function ProspeccaoPage() {
+  return (
+    <Flex direction="column" w="100%">
+      <ServiceHero
+        tagline="Prospecção de Clientes"
+        title="Encontre e conquiste"
+        highlight="novos clientes"
+        subtitle="Ajudamos sua empresa a identificar e alcançar novos clientes através de estratégias de prospecção eficazes. Mais reuniões com as pessoas certas, menos esforço desperdiçado."
+        ctaLabel="Quero mais clientes"
+        trackingId="prospeccao"
+        icon={PiMagnifyingGlassBold}
+      />
+      <ServiceFeatures
+        heading="Nossa metodologia de prospecção"
+        subheading="Um processo estruturado que transforma desconhecidos em oportunidades reais de negócio."
+        features={features}
+      />
+      <ServiceCTA
+        heading="Sua empresa depende de indicações?"
+        subheading="Construímos um motor de prospecção ativo que não depende de sorte ou indicações para trazer novos clientes."
+        ctaLabel="Montar meu motor de prospecção"
+        trackingId="prospeccao"
+        whatsappMessage="Olá! Tenho interesse em Consultoria de Prospecção de Clientes com a Awer."
+      />
+      <ContactUs />
+    </Flex>
+  );
 }

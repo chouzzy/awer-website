@@ -2,7 +2,8 @@
 'use client';
 
 // --- React e Frameworks ---
-import { track } from '@vercel/analytics'; // <-- 1. Importe o track aqui
+import { track } from '@vercel/analytics';
+import { trackEvent } from '@/lib/analytics';
 import {
     Flex,
     Heading,
@@ -115,6 +116,8 @@ export function ContactUs() {
     } = useForm<FormValues>();
 
     const onSubmit = handleSubmit((data) => {
+        track('contact_form_submit', { source: 'botrt_contact' });
+        trackEvent({ event: 'contact_form_submit', source: 'botrt_contact' });
         const link = generateWhatsappLink(data.name, data.message);
         window.open(link, '_blank');
     });
