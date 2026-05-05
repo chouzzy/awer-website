@@ -1,18 +1,10 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import {
-  Box, Button, Flex, Heading, Icon, Input, Text,
-  VStack, Portal, createListCollection, Select,
-} from '@chakra-ui/react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-  PiXBold, PiCheckCircleFill, PiWhatsappLogoBold,
-  PiChartLineUpBold, PiArrowRightBold,
-} from 'react-icons/pi';
 import { trackEvent } from '@/lib/analytics';
 import { whatsappLink } from '@/utils';
 
@@ -20,118 +12,104 @@ const schema = z.object({
   nome:         z.string().min(3, 'Mínimo 3 caracteres'),
   whatsapp:     z.string().min(10, 'WhatsApp inválido'),
   email:        z.string().email('E-mail inválido'),
-  tipoEmpresa:  z.enum(['MEI', 'ME', 'EPP', 'Médio porte'], { message: 'Selecione o tipo' }),
-  faturamento:  z.enum(['ate10k', '10k50k', '50k200k', 'acima200k'], { message: 'Selecione' }),
-  principalDor: z.enum(['fluxo', 'lucratividade', 'precificacao', 'planejamento', 'outro'], { message: 'Selecione' }),
+  tipoEmpresa:  z.string().min(1, 'Selecione o tipo'),
+  faturamento:  z.string().min(1, 'Selecione o faturamento'),
+  principalDor: z.string().min(1, 'Selecione o desafio'),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3333';
 
-// ─── Estilos inline fixos (não dependem de tokens Chakra) ─────────────────
-const S = {
-  overlay: {
-    position: 'fixed' as const,
-    inset: 0,
-    background: 'rgba(0,0,0,0.82)',
-    backdropFilter: 'blur(4px)',
-    zIndex: 1000,
-  } as React.CSSProperties,
+const tipoOptions   = ['MEI', 'ME', 'EPP', 'Médio porte'];
+const fatOptions    = ['Até R$10k', 'R$10k–50k', 'R$50k–200k', 'Acima R$200k'];
+const dorOptions    = ['Fluxo de caixa', 'Lucratividade', 'Precificação', 'Planejamento', 'Outro'];
 
-  wrapper: {
-    position: 'fixed' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '100%',
-    maxWidth: 520,
-    maxHeight: '90vh',
-    overflowY: 'auto' as const,
-    zIndex: 1001,
-    padding: '0 16px',
-  } as React.CSSProperties,
-
-  card: {
-    background: '#111114',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: 20,
-    padding: '32px',
-    position: 'relative' as const,
-  } as React.CSSProperties,
-
-  input: {
-    background: 'rgba(255,255,255,0.06)',
-    border: '1px solid rgba(255,255,255,0.15)',
-    borderRadius: 8,
-    color: '#fff',
-    width: '100%',
-    padding: '10px 14px',
-    fontSize: 14,
-    outline: 'none',
-  } as React.CSSProperties,
-
-  label: {
-    color: '#aaa',
-    fontSize: 13,
-    marginBottom: 4,
-    display: 'block' as const,
-    fontWeight: 500,
-  } as React.CSSProperties,
-
-  error: {
-    color: '#fc8181',
-    fontSize: 12,
-    marginTop: 3,
-  } as React.CSSProperties,
-
-  select: {
-    background: '#1e1e22',
-    border: '1px solid rgba(255,255,255,0.15)',
-    borderRadius: 8,
-    color: '#fff',
-    width: '100%',
-    padding: '10px 14px',
-    fontSize: 14,
-    outline: 'none',
-    appearance: 'none' as const,
-    WebkitAppearance: 'none' as const,
-    cursor: 'pointer',
-    colorScheme: 'dark',
-  } as React.CSSProperties,
-};
-
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
+function OptionGroup({
+  options, value, onChange, error,
+}: { options: string[]; value: string; onChange: (v: string) => void; error?: string }) {
+  return (
+    <div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        {options.map(opt => {
+          const selected = value === opt;
+          return (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => onChange(opt)}
+              style={{
+                padding: '8px 16px',
+                borderRadius: 8,
+                border: `1px solid ${selected ? '#FF5F5E' : 'rgba(255,255,255,0.15)'}`,
+                background: selected ? 'rgba(255,95,94,0.15)' : 'rgba(255,255,255,0.04)',
+                color: selected ? '#FF5F5E' : '#aaa',
+                fontSize: 13,
+                fontWeight: selected ? 600 : 400,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+      {error && <p style={{ color: '#fc8181', fontSize: 12, marginTop: 4 }}>{error}</p>}
+    </div>
+  );
 }
+
+interface Props { isOpen: boolean; onClose: () => void; }
 
 export function DiagnosticoModal({ isOpen, onClose }: Props) {
   const [step, setStep] = useState<'form' | 'success'>('form');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [serverError, setServerError] = useState('');
+  const [tipoEmpresa, setTipoEmpresa]   = useState('');
+  const [faturamento, setFaturamento]   = useState('');
+  const [principalDor, setPrincipalDor] = useState('');
 
-  const { register, control, handleSubmit, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = async (data: FormValues) => {
+    // validação manual dos grupos de opção
+    let hasError = false;
+    if (!tipoEmpresa)  { setError('tipoEmpresa',  { message: 'Selecione o tipo' });   hasError = true; }
+    if (!faturamento)  { setError('faturamento',  { message: 'Selecione o faturamento' }); hasError = true; }
+    if (!principalDor) { setError('principalDor', { message: 'Selecione o desafio' }); hasError = true; }
+    if (hasError) return;
+
     setIsSubmitting(true);
     setServerError('');
+
     try {
       const res = await fetch(`${API_URL}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, tipoEmpresa, faturamento, principalDor }),
       });
-      if (!res.ok) throw new Error('Erro ao enviar');
-      trackEvent({ event: 'contact_form_submit', source: 'diagnostico_financeiro', tipo: data.tipoEmpresa });
+      if (!res.ok) throw new Error();
+      trackEvent({ event: 'contact_form_submit', source: 'diagnostico_financeiro', tipo: tipoEmpresa });
       setStep('success');
     } catch {
-      setServerError('Erro ao enviar. Tente novamente em instantes.');
+      setServerError('Erro ao enviar. Tente novamente.');
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const inp: React.CSSProperties = {
+    width: '100%', padding: '10px 14px', borderRadius: 8, fontSize: 14,
+    background: '#1a1a1e', border: '1px solid rgba(255,255,255,0.12)',
+    color: '#fff', outline: 'none', boxSizing: 'border-box',
+  };
+
+  const lbl: React.CSSProperties = {
+    display: 'block', color: '#999', fontSize: 13, marginBottom: 6, fontWeight: 500,
   };
 
   return (
@@ -141,11 +119,9 @@ export function DiagnosticoModal({ isOpen, onClose }: Props) {
           {/* Overlay */}
           <motion.div
             key="overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
-            style={S.overlay}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(4px)', zIndex: 1000 }}
           />
 
           {/* Modal */}
@@ -155,181 +131,152 @@ export function DiagnosticoModal({ isOpen, onClose }: Props) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 16 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            style={S.wrapper}
+            style={{
+              position: 'fixed', top: '50%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '100%', maxWidth: 520,
+              maxHeight: '90vh', overflowY: 'auto',
+              zIndex: 1001, padding: '0 16px',
+            }}
           >
-            <div style={S.card}>
-              {/* Botão fechar */}
-              <button
-                onClick={onClose}
-                style={{
-                  position: 'absolute', top: 16, right: 16,
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  color: '#666', fontSize: 18, lineHeight: 1,
-                }}
-              >
-                ✕
-              </button>
+            <div style={{
+              background: '#111114',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 20, padding: '28px 28px 24px',
+              position: 'relative',
+            }}>
+              {/* Fechar */}
+              <button onClick={onClose} style={{
+                position: 'absolute', top: 14, right: 14,
+                background: 'none', border: 'none', color: '#555',
+                fontSize: 20, cursor: 'pointer', lineHeight: 1, padding: 4,
+              }}>✕</button>
 
               {step === 'form' ? (
                 <>
                   {/* Header */}
-                  <Flex align="center" gap={3} mb={6}>
-                    <Flex align="center" justify="center"
-                      w="40px" h="40px" borderRadius="10px"
-                      style={{ background: 'rgba(255,95,94,0.15)', flexShrink: 0 }}
-                    >
-                      <Icon as={PiChartLineUpBold} color="brand.400" boxSize={5} />
-                    </Flex>
-                    <Box>
-                      <Text color="white" fontWeight="bold" fontSize="lg" lineHeight={1.2}>
-                        Diagnóstico Financeiro
-                      </Text>
-                      <Text style={{ color: '#888', fontSize: 13 }}>Gratuito — sem compromisso</Text>
-                    </Box>
-                  </Flex>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(255,95,94,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>
+                      📊
+                    </div>
+                    <div>
+                      <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, lineHeight: 1.2 }}>Diagnóstico Financeiro</div>
+                      <div style={{ color: '#777', fontSize: 13 }}>Gratuito — sem compromisso</div>
+                    </div>
+                  </div>
 
-                  <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', marginBottom: 20 }} />
+                  <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 20 }} />
 
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <VStack gap={4} align="stretch">
+                  <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
                       {/* Nome */}
                       <div>
-                        <label style={S.label}>Nome completo</label>
-                        <input {...register('nome')} placeholder="João Silva" style={S.input} />
-                        {errors.nome && <p style={S.error}>{errors.nome.message}</p>}
+                        <label style={lbl}>Nome completo</label>
+                        <input {...register('nome')} placeholder="João Silva" style={inp} />
+                        {errors.nome && <p style={{ color: '#fc8181', fontSize: 12, marginTop: 4 }}>{errors.nome.message}</p>}
                       </div>
 
                       {/* WhatsApp */}
                       <div>
-                        <label style={S.label}>WhatsApp</label>
-                        <input {...register('whatsapp')} placeholder="(11) 99999-9999" style={S.input} />
-                        {errors.whatsapp && <p style={S.error}>{errors.whatsapp.message}</p>}
+                        <label style={lbl}>WhatsApp</label>
+                        <input {...register('whatsapp')} placeholder="(11) 99999-9999" style={inp} />
+                        {errors.whatsapp && <p style={{ color: '#fc8181', fontSize: 12, marginTop: 4 }}>{errors.whatsapp.message}</p>}
                       </div>
 
                       {/* Email */}
                       <div>
-                        <label style={S.label}>E-mail</label>
-                        <input {...register('email')} type="email" placeholder="joao@empresa.com" style={S.input} />
-                        {errors.email && <p style={S.error}>{errors.email.message}</p>}
+                        <label style={lbl}>E-mail</label>
+                        <input {...register('email')} type="email" placeholder="joao@empresa.com" style={inp} />
+                        {errors.email && <p style={{ color: '#fc8181', fontSize: 12, marginTop: 4 }}>{errors.email.message}</p>}
                       </div>
 
                       {/* Tipo de empresa */}
                       <div>
-                        <label style={S.label}>Tipo de empresa</label>
-                        <Controller control={control} name="tipoEmpresa" render={({ field }) => (
-                          <select
-                            value={field.value ?? ''}
-                            onChange={e => field.onChange(e.target.value)}
-                            style={{ ...S.select, backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center' }}
-                          >
-                            <option value="" disabled style={{ background: '#1a1a1e' }}>Selecione</option>
-                            <option value="MEI" style={{ background: '#1a1a1e' }}>MEI</option>
-                            <option value="ME" style={{ background: '#1a1a1e' }}>ME — Microempresa</option>
-                            <option value="EPP" style={{ background: '#1a1a1e' }}>EPP — Pequeno Porte</option>
-                            <option value="Médio porte" style={{ background: '#1a1a1e' }}>Médio porte</option>
-                          </select>
-                        )} />
-                        {errors.tipoEmpresa && <p style={S.error}>{errors.tipoEmpresa.message}</p>}
+                        <label style={lbl}>Tipo de empresa</label>
+                        <OptionGroup
+                          options={tipoOptions}
+                          value={tipoEmpresa}
+                          onChange={v => { setTipoEmpresa(v); clearErrors('tipoEmpresa'); }}
+                          error={errors.tipoEmpresa?.message}
+                        />
                       </div>
 
                       {/* Faturamento */}
                       <div>
-                        <label style={S.label}>Faturamento médio mensal</label>
-                        <Controller control={control} name="faturamento" render={({ field }) => (
-                          <select
-                            value={field.value ?? ''}
-                            onChange={e => field.onChange(e.target.value)}
-                            style={{ ...S.select, backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center' }}
-                          >
-                            <option value="" disabled style={{ background: '#1a1a1e' }}>Selecione</option>
-                            <option value="ate10k" style={{ background: '#1a1a1e' }}>Até R$ 10 mil/mês</option>
-                            <option value="10k50k" style={{ background: '#1a1a1e' }}>R$ 10 mil – R$ 50 mil/mês</option>
-                            <option value="50k200k" style={{ background: '#1a1a1e' }}>R$ 50 mil – R$ 200 mil/mês</option>
-                            <option value="acima200k" style={{ background: '#1a1a1e' }}>Acima de R$ 200 mil/mês</option>
-                          </select>
-                        )} />
-                        {errors.faturamento && <p style={S.error}>{errors.faturamento.message}</p>}
+                        <label style={lbl}>Faturamento médio mensal</label>
+                        <OptionGroup
+                          options={fatOptions}
+                          value={faturamento}
+                          onChange={v => { setFaturamento(v); clearErrors('faturamento'); }}
+                          error={errors.faturamento?.message}
+                        />
                       </div>
 
                       {/* Principal dor */}
                       <div>
-                        <label style={S.label}>Principal desafio financeiro</label>
-                        <Controller control={control} name="principalDor" render={({ field }) => (
-                          <select
-                            value={field.value ?? ''}
-                            onChange={e => field.onChange(e.target.value)}
-                            style={{ ...S.select, backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center' }}
-                          >
-                            <option value="" disabled style={{ background: '#1a1a1e' }}>Selecione</option>
-                            <option value="fluxo" style={{ background: '#1a1a1e' }}>Fluxo de caixa</option>
-                            <option value="lucratividade" style={{ background: '#1a1a1e' }}>Lucratividade</option>
-                            <option value="precificacao" style={{ background: '#1a1a1e' }}>Precificação</option>
-                            <option value="planejamento" style={{ background: '#1a1a1e' }}>Planejamento financeiro</option>
-                            <option value="outro" style={{ background: '#1a1a1e' }}>Outro</option>
-                          </select>
-                        )} />
-                        {errors.principalDor && <p style={S.error}>{errors.principalDor.message}</p>}
+                        <label style={lbl}>Principal desafio financeiro</label>
+                        <OptionGroup
+                          options={dorOptions}
+                          value={principalDor}
+                          onChange={v => { setPrincipalDor(v); clearErrors('principalDor'); }}
+                          error={errors.principalDor?.message}
+                        />
                       </div>
 
-                      {serverError && (
-                        <p style={{ ...S.error, textAlign: 'center', fontSize: 14 }}>{serverError}</p>
-                      )}
+                      {serverError && <p style={{ color: '#fc8181', fontSize: 13, textAlign: 'center' }}>{serverError}</p>}
 
-                      <Button
+                      <button
                         type="submit"
-                        bg="brand.500" color="white"
-                        size="lg" w="100%"
-                        loading={isSubmitting}
-                        _hover={{ bg: 'brand.600' }}
-                        mt={1}
+                        disabled={isSubmitting}
+                        style={{
+                          width: '100%', padding: '13px', borderRadius: 10,
+                          background: isSubmitting ? '#b34443' : '#FF5F5E',
+                          color: '#fff', fontWeight: 700, fontSize: 15,
+                          border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                          marginTop: 4, transition: 'background 0.2s',
+                        }}
                       >
-                        {!isSubmitting && <Icon as={PiArrowRightBold} mr={2} />}
-                        Quero meu diagnóstico gratuito
-                      </Button>
+                        {isSubmitting ? 'Enviando...' : '→ Quero meu diagnóstico gratuito'}
+                      </button>
 
-                      <p style={{ color: '#555', fontSize: 12, textAlign: 'center', margin: 0 }}>
+                      <p style={{ color: '#444', fontSize: 12, textAlign: 'center', margin: 0 }}>
                         Seus dados são confidenciais. Sem spam.
                       </p>
-                    </VStack>
+                    </div>
                   </form>
                 </>
               ) : (
                 /* Sucesso */
-                <VStack gap={6} align="center" py={4} textAlign="center">
-                  <Flex align="center" justify="center" w="64px" h="64px" borderRadius="full"
-                    style={{ background: 'rgba(72,199,142,0.15)' }}
-                  >
-                    <Icon as={PiCheckCircleFill} color="green.400" boxSize={8} />
-                  </Flex>
-                  <Box>
-                    <Text color="white" fontWeight="bold" fontSize="lg" mb={2}>Recebemos seu pedido!</Text>
-                    <Text style={{ color: '#999', lineHeight: 1.6, fontSize: 14 }}>
-                      Nossa equipe vai analisar seu perfil e entrar em contato pelo WhatsApp em até{' '}
-                      <strong style={{ color: 'white' }}>24 horas</strong>.
-                    </Text>
-                  </Box>
+                <div style={{ textAlign: 'center', padding: '16px 0' }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
+                  <div style={{ color: '#fff', fontWeight: 700, fontSize: 20, marginBottom: 8 }}>
+                    Recebemos seu pedido!
+                  </div>
+                  <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 24 }}>
+                    Nossa equipe vai analisar seu perfil e entrar em contato pelo WhatsApp em até <strong style={{ color: '#fff' }}>24 horas</strong>.
+                  </p>
                   <a
                     href={whatsappLink('Olá! Acabei de solicitar um diagnóstico financeiro gratuito no site da Awer.')}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ width: '100%' }}
                     onClick={() => trackEvent({ event: 'whatsapp_click', source: 'diagnostico_sucesso' })}
+                    style={{
+                      display: 'block', width: '100%', padding: '13px',
+                      background: '#25D366', color: '#fff', borderRadius: 10,
+                      fontWeight: 700, fontSize: 15, textDecoration: 'none',
+                      textAlign: 'center', marginBottom: 12,
+                    }}
                   >
-                    <Button style={{ background: '#25D366', color: '#fff', width: '100%' }}
-                      _hover={{ opacity: 0.9 }}
-                    >
-                      <Icon as={PiWhatsappLogoBold} mr={2} boxSize={5} />
-                      Falar agora no WhatsApp
-                    </Button>
+                    💬 Falar agora no WhatsApp
                   </a>
                   <button
                     onClick={onClose}
-                    style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: 13 }}
+                    style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: 13 }}
                   >
                     Fechar
                   </button>
-                </VStack>
+                </div>
               )}
             </div>
           </motion.div>
