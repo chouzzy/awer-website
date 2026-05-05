@@ -142,7 +142,7 @@ export function DiagnosticoModal({ isOpen, onClose }: Props) {
             border="1px solid"
             borderColor="whiteAlpha.150"
             borderRadius="2xl"
-            maxW="500px"
+            maxW="620px"
             w="full"
             mx={4}
           >
