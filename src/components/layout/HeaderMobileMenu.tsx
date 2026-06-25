@@ -78,11 +78,18 @@ export function HeaderMobileMenu({ isAuthenticated, isAwerClient, isAdmin }: Hea
                                 )}
 
                                 {isAdmin && (
-                                    <Menu.Item value="admin" asChild>
-                                        <ChakraLink href="/awer-admin/tickets" w="100%" px={3} py={2} bg="brand.500" color="white">
-                                            QG Awer (Gestão)
-                                        </ChakraLink>
-                                    </Menu.Item>
+                                    <>
+                                        <Menu.Item value="admin" asChild>
+                                            <ChakraLink href="/awer-admin/tickets" w="100%" px={3} py={2} bg="brand.500" color="white">
+                                                QG Awer (Gestão)
+                                            </ChakraLink>
+                                        </Menu.Item>
+                                        <Menu.Item value="botrt-admin" asChild>
+                                            <ChakraLink href="/awer-admin/botrt/usuarios" w="100%" px={3} py={2} bg="gray.700" color="white">
+                                                BoTRT Admin
+                                            </ChakraLink>
+                                        </Menu.Item>
+                                    </>
                                 )}
                             </Menu.Content>
                         </Menu.Positioner>
