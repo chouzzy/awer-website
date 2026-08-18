@@ -6,7 +6,7 @@
  * USO
  *   node scripts/ticket.mjs clientes
  *   node scripts/ticket.mjs listar [--status OPEN]
- *   node scripts/ticket.mjs criar --cliente <email|id> --titulo "..." --desc "..." [--prioridade HIGH] [--confirmar]
+ *   node scripts/ticket.mjs criar --cliente <email|id> --projeto "Stech — Portal do Aluno" --titulo "..." --desc "..." [--prioridade HIGH] [--confirmar]
  *
  * Sem --confirmar, o comando "criar" só mostra o que seria gravado (dry-run).
  *
@@ -49,7 +49,7 @@ Help Awer — registrar chamados pelo terminal
 
   node scripts/ticket.mjs clientes
   node scripts/ticket.mjs listar [--status OPEN]
-  node scripts/ticket.mjs criar --cliente <email|id> --titulo "..." --desc "..." [--prioridade HIGH] [--confirmar]
+  node scripts/ticket.mjs criar --cliente <email|id> --projeto "Stech — Portal do Aluno" --titulo "..." --desc "..." [--prioridade HIGH] [--confirmar]
 
 Sem --confirmar, o comando "criar" apenas mostra o que seria gravado.
 `;
@@ -96,6 +96,7 @@ async function cmdListar(db) {
 
 async function cmdCriar(db) {
   const alvo = opt("cliente");
+  const nomeProjeto = opt("projeto");
   const titulo = opt("titulo");
   const desc = opt("desc");
   const prioridade = (opt("prioridade") || "MEDIUM").toUpperCase();
@@ -135,6 +136,21 @@ async function cmdCriar(db) {
     return;
   }
 
+  // resolve o projeto pelo nome (sem diferenciar maiúsculas)
+  let projeto = null;
+  if (nomeProjeto) {
+    const todos = await db.collection("projects").find({}).toArray();
+    projeto = todos.find(
+      (p) => (p.nome || "").trim().toLowerCase() === nomeProjeto.trim().toLowerCase()
+    );
+    if (!projeto) {
+      console.error(`Projeto nao encontrado: "${nomeProjeto}"`);
+      console.error("Rode 'node scripts/projetos.mjs listar' para ver os nomes.");
+      process.exitCode = 1;
+      return;
+    }
+  }
+
   const novo = {
     title: titulo,
     description: desc,
@@ -146,10 +162,12 @@ async function cmdCriar(db) {
     createdAt: new Date(),
     updatedAt: new Date(),
     registradoPor: "awer-cli",
+    ...(projeto ? { projectId: projeto._id } : {}),
   };
 
   console.log("\n---------- CHAMADO A REGISTRAR ----------");
   console.log(`  Cliente    : ${dono.name || "(sem nome)"} <${dono.email || "-"}>`);
+  console.log(`  Projeto    : ${projeto ? projeto.nome : "(NENHUM — passe --projeto)"}`);
   console.log(`  Titulo     : ${novo.title}`);
   console.log(`  Prioridade : ${CORES[prioridade]} ${prioridade}`);
   console.log(`  Descricao  : ${novo.description}`);
