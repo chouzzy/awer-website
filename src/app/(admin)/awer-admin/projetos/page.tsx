@@ -1,4 +1,5 @@
-import { Container, Flex, Heading, Text, Box } from "@chakra-ui/react";
+import { Container, Flex, Heading, Text, Box, Button } from "@chakra-ui/react";
+import Link from "next/link";
 import { getTodosProjetos, getUsuariosComProjetos } from "@/actions/projects";
 import clientPromise from "@/lib/mongodb";
 import { GestaoProjetos } from "./components/GestaoProjetos";
@@ -29,14 +30,21 @@ export default async function AdminProjetosPage() {
   return (
     <Container maxW="container.xl" py={{ base: 10, md: 20 }}>
       <Flex direction="column" gap={8}>
-        <Box>
-          <Heading as="h1" size="xl" color="ghostWhite" mb={2}>
-            Projetos <Box as="span" color="brand.500">Awer</Box>
-          </Heading>
-          <Text color="gray.400">
-            Cadastre os projetos e defina quem enxerga cada um. Quem tem e-mail @awer.co vê todos.
-          </Text>
-        </Box>
+        <Flex justify="space-between" align="flex-start" wrap="wrap" gap={4}>
+          <Box>
+            <Heading as="h1" size="xl" color="ghostWhite" mb={2}>
+              Projetos <Box as="span" color="brand.500">Awer</Box>
+            </Heading>
+            <Text color="gray.400">
+              Cadastre os projetos e defina quem enxerga cada um. Quem tem e-mail @awer.co vê todos.
+            </Text>
+          </Box>
+          <Link href="/awer-admin/tickets">
+            <Button variant="outline" borderColor="whiteAlpha.300" color="ghostWhite" _hover={{ bg: "whiteAlpha.100" }}>
+              Voltar aos chamados
+            </Button>
+          </Link>
+        </Flex>
 
         <GestaoProjetos
           projetos={projetos}

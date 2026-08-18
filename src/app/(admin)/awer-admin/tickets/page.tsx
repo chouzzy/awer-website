@@ -1,4 +1,5 @@
-import { Flex, Container, Heading, Text, Box } from "@chakra-ui/react";
+import { Flex, Container, Heading, Text, Box, Button } from "@chakra-ui/react";
+import Link from "next/link";
 import clientPromise from "@/lib/mongodb";
 import { AdminTicketList } from "./components/AdminTicketList";
 
@@ -57,14 +58,21 @@ export default async function AdminTicketsPage() {
     <Container maxW="container.xl" py={{ base: 10, md: 20 }}>
       <Flex direction="column" gap={8}>
         
-        <Box>
-          <Heading as="h1" size="xl" color="ghostWhite" mb={2}>
-            QG <Box as="span" color="brand.500">Awer</Box>
-          </Heading>
-          <Text color="gray.400">
-            Painel de controle. Gere todos os chamados, altera estados e dá baixa nos pedidos.
-          </Text>
-        </Box>
+        <Flex justify="space-between" align="flex-start" wrap="wrap" gap={4}>
+          <Box>
+            <Heading as="h1" size="xl" color="ghostWhite" mb={2}>
+              QG <Box as="span" color="brand.500">Awer</Box>
+            </Heading>
+            <Text color="gray.400">
+              Painel de controle. Gere todos os chamados, altera estados e dá baixa nos pedidos.
+            </Text>
+          </Box>
+          <Link href="/awer-admin/projetos">
+            <Button variant="outline" borderColor="whiteAlpha.300" color="ghostWhite" _hover={{ bg: "whiteAlpha.100" }}>
+              Gerir projetos e acessos
+            </Button>
+          </Link>
+        </Flex>
 
         <Box 
           w="100%" 

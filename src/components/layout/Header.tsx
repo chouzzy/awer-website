@@ -24,7 +24,7 @@ import { HeaderMobileMenu } from "./HeaderMobileMenu";
 import { headerData } from "@/data/header";
 import { UserAvatar } from "./UserAvatar";
 import { useProfile } from "@/contexts/ProfileContext"; // 1. Importa o nosso hook de perfil
-import { PiHeadsetBold, PiRobotBold } from "react-icons/pi";
+import { PiHeadsetBold, PiRobotBold, PiFolderBold } from "react-icons/pi";
 import { trackEvent } from "@/lib/analytics";
 
 // ============================================================================
@@ -115,6 +115,12 @@ export function Header() {
                                 <Button size="sm" bg="brand.500" color="white" px={4} _hover={{ bg: 'brand.600' }}>
                                     <Icon as={PiHeadsetBold} />
                                     HELP AWER
+                                </Button>
+                            </ChakraLink>
+                            <ChakraLink href="/awer-admin/projetos" _hover={{ textDecoration: 'none' }}>
+                                <Button size="sm" bg="gray.700" color="white" px={4} _hover={{ bg: 'gray.600' }}>
+                                    <Icon as={PiFolderBold} />
+                                    PROJETOS
                                 </Button>
                             </ChakraLink>
                             <ChakraLink href="/awer-admin/botrt/usuarios" _hover={{ textDecoration: 'none' }}>
