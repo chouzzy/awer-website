@@ -167,6 +167,18 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
     });
   }, [initialTickets]);
 
+  const projectCollection = useMemo(() => {
+    const unique = Array.from(new Set(initialTickets.map(t => t.projectName).filter(Boolean))) as string[];
+    const temSemProjeto = initialTickets.some(t => !t.projectName);
+    return createListCollection({
+      items: [
+        { label: "Todos os Projetos", value: "ALL" },
+        ...unique.sort().map(p => ({ label: p, value: p })),
+        ...(temSemProjeto ? [{ label: "— sem projeto —", value: "__SEM__" }] : []),
+      ]
+    });
+  }, [initialTickets]);
+
   const processedTickets = useMemo(() => {
     let temp = [...initialTickets];
     if (filterStatus   !== "ALL") temp = temp.filter(t => t.status   === filterStatus);
@@ -307,6 +319,25 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
                   <Select.Positioner>
                     <Select.Content bg="#0F1115" borderColor="whiteAlpha.200">
                       {filterPriorityCollection.items.map(item => (
+                        <Select.Item item={item} key={item.value} _hover={{ bg: "whiteAlpha.100" }} color="white" cursor="pointer">
+                          {item.label} <Select.ItemIndicator />
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Positioner>
+                </Portal>
+              </Select.Root>
+            </Box>
+
+            <Box flex={1} minW="140px">
+              <Text fontSize="xs" color="gray.400" mb={1} textTransform="uppercase">Projeto</Text>
+              <Select.Root collection={projectCollection} value={[filterProject]} onValueChange={(e) => setFilterProject(e.value[0])} size="sm">
+                <Select.HiddenSelect />
+                <Select.Control><Select.Trigger color="white" borderColor="whiteAlpha.200"><Select.ValueText /></Select.Trigger></Select.Control>
+                <Portal>
+                  <Select.Positioner>
+                    <Select.Content bg="#0F1115" borderColor="whiteAlpha.200">
+                      {projectCollection.items.map(item => (
                         <Select.Item item={item} key={item.value} _hover={{ bg: "whiteAlpha.100" }} color="white" cursor="pointer">
                           {item.label} <Select.ItemIndicator />
                         </Select.Item>
