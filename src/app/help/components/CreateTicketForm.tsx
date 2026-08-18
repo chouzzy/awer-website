@@ -55,7 +55,12 @@ export function CreateTicketForm({ clientId, projetos = [] }: { clientId: string
 
   const projetoCollection = useMemo(
     () => createListCollection({
-      items: projetos.map((p) => ({ value: p.id, label: p.cliente ? `${p.nome} — ${p.cliente}` : p.nome })),
+      items: projetos.map((p) => ({
+        value: p.id,
+        label: p.cliente && !p.nome.toLowerCase().includes(p.cliente.toLowerCase())
+          ? `${p.nome} — ${p.cliente}`
+          : p.nome,
+      })),
     }),
     [projetos]
   );

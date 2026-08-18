@@ -45,7 +45,10 @@ export function TicketList({
   
   // Filtramos os tickets no client-side por segurança extra, 
   // embora o ideal seja já virem filtrados do servidor.
-  const myTickets = initialTickets.filter(t => t.clientId === clientId);
+  // A lista já vem filtrada do servidor (por projeto liberado + chamados do
+  // próprio usuário). Filtrar de novo aqui esconderia os chamados que a Awer
+  // registrou em nome do cliente.
+  const myTickets = initialTickets;
 
   const getStatusColor = (status: string) => {
     switch (status) {

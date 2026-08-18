@@ -55,9 +55,19 @@ export async function getTicketsDoUsuario(clientId: string) {
   if (!user) return [];
 
   const ehAwer = typeof user.email === "string" && user.email.endsWith("@awer.co");
+  const meusProjetos = (user.projectIds || []) as ObjectId[];
 
-  // Cliente comum vê o que é dele. Time Awer vê tudo.
-  const filtro = ehAwer ? {} : { clientId: new ObjectId(clientId) };
+  // Time Awer vê tudo. Cliente vê os chamados dos PROJETOS a que tem acesso
+  // (não importa quem abriu — a Awer costuma registrar em nome dele) e também
+  // qualquer chamado que ele mesmo tenha aberto.
+  const filtro = ehAwer
+    ? {}
+    : {
+        $or: [
+          { projectId: { $in: meusProjetos } },
+          { clientId: new ObjectId(clientId) },
+        ],
+      };
 
   const raw = await db.collection("tickets").find(filtro).sort({ createdAt: -1 }).toArray();
 
