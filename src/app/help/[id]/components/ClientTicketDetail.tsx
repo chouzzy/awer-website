@@ -13,6 +13,7 @@ import {
 } from "react-icons/pi";
 import { addTicketMessage } from "@/actions/tickets";
 import { getOrCreateMongoUser } from "@/actions/users";
+import { podeVerTicket } from "@/actions/projects";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toaster } from "@/components/ui/toaster";
 import { trackEvent } from "@/lib/analytics";
@@ -63,6 +64,7 @@ export function ClientTicketDetail({ ticket }: { ticket: TicketDetail }) {
   const router = useRouter();
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [dbUser, setDbUser] = useState<any>(null);
+  const [podeVer, setPodeVer] = useState<boolean | null>(null);
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -74,6 +76,10 @@ export function ClientTicketDetail({ ticket }: { ticket: TicketDetail }) {
       if (isAuthenticated && user?.sub) {
         const mongoUser = await getOrCreateMongoUser(user.sub, user.email || "");
         setDbUser(mongoUser);
+        // a permissão é decidida no servidor: projeto liberado, chamado próprio
+        // ou time Awer. Antes era só "sou o dono?", o que barrava o cliente nos
+        // chamados que a Awer registrou por ele.
+        setPodeVer(await podeVerTicket(mongoUser._id, ticket.id));
       }
     }
     sync();
@@ -93,12 +99,12 @@ export function ClientTicketDetail({ ticket }: { ticket: TicketDetail }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [ticket.messages]);
 
-  if (isLoading || (isAuthenticated && !dbUser)) {
+  if (isLoading || (isAuthenticated && (!dbUser || podeVer === null))) {
     return <Center h="400px"><Spinner color="brand.500" size="xl" /></Center>;
   }
 
-  // Validação de ownership
-  if (dbUser && dbUser._id !== ticket.clientId) {
+  // Permissão por projeto (calculada no servidor)
+  if (dbUser && podeVer === false) {
     return (
       <Center h="400px" bg="rgba(255, 95, 94, 0.05)" borderRadius="2xl" border="1px dashed" borderColor="brand.500">
         <Flex direction="column" align="center" gap={4}>
@@ -106,8 +112,8 @@ export function ClientTicketDetail({ ticket }: { ticket: TicketDetail }) {
           <Box textAlign="center">
             <Heading size="md" color="ghostWhite" mb={2}>Acesso Restrito</Heading>
             <Text color="gray.400">
-              Este chamado pertence a outra conta. <br />
-              Certifique-se de que está logado com o e-mail correto.
+              Este chamado é de um projeto ao qual você não tem acesso. <br />
+              Se acha que deveria ver, fale com a Awer.
             </Text>
           </Box>
         </Flex>

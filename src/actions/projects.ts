@@ -200,3 +200,28 @@ export async function alternarProjetoAtivo(projetoId: string, ativo: boolean) {
   revalidatePath("/help");
   return { success: true };
 }
+
+/**
+ * Diz se um usuário pode abrir um chamado.
+ * Regra: time Awer vê tudo; cliente vê o que é do projeto a que tem acesso,
+ * ou o que ele mesmo abriu. Antes a checagem era só pelo dono do chamado, o
+ * que escondia do cliente os chamados que a Awer registrou em nome dele.
+ */
+export async function podeVerTicket(clientId: string, ticketId: string): Promise<boolean> {
+  if (!ObjectId.isValid(clientId) || !ObjectId.isValid(ticketId)) return false;
+
+  const client = await clientPromise;
+  const db = client.db("help_awer");
+
+  const [user, ticket] = await Promise.all([
+    db.collection("users").findOne({ _id: new ObjectId(clientId) }),
+    db.collection("tickets").findOne({ _id: new ObjectId(ticketId) }),
+  ]);
+  if (!user || !ticket) return false;
+
+  if (typeof user.email === "string" && user.email.endsWith("@awer.co")) return true;
+  if (ticket.clientId && ticket.clientId.toString() === clientId) return true;
+
+  const meus = (user.projectIds || []).map((p: ObjectId) => p.toString());
+  return !!ticket.projectId && meus.includes(ticket.projectId.toString());
+}
