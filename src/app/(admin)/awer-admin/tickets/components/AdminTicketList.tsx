@@ -13,10 +13,12 @@ import {
 } from "react-icons/pi";
 import { updateTicketStatus } from "@/actions/tickets";
 import { toaster } from "@/components/ui/toaster";
+import { TicketTooltip } from "@/components/ui/ticket-tooltip";
 
 interface TicketAdmin {
   id: string;
   title: string;
+  description?: string;
   status: string;
   priority: string;
   createdAt: string;
@@ -438,7 +440,9 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
                       _hover={{ color: "brand.400" }} transition="color 0.2s"
                       overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" maxW="280px"
                     >
-                      {ticket.title}
+                      <TicketTooltip titulo={ticket.title} descricao={ticket.description}>
+                        <span>{ticket.title}</span>
+                      </TicketTooltip>
                     </Text>
                   </Link>
                   <Text color="gray.500" fontSize="xs">

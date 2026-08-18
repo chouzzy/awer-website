@@ -46,6 +46,7 @@ export default async function AdminTicketsPage() {
   const tickets = rawTickets.map(t => ({
     id: t._id.toString(),
     title: t.title || "(sem titulo)",
+    description: t.description || "",
     status: t.status || "OPEN",
     priority: t.priority || "MEDIUM",
     createdAt: (t.createdAt instanceof Date ? t.createdAt : t._id.getTimestamp()).toISOString(),
