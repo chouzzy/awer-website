@@ -33,14 +33,14 @@ export default async function TicketDetailPage({
   // 3. Serializa os dados para o Client Component
  const serializedTicket = {
     id: ticket._id.toString(),
-    title: ticket.title,
-    description: ticket.description,
-    status: ticket.status,
-    priority: ticket.priority,
+    title: ticket.title || "(sem titulo)",
+    description: ticket.description || "",
+    status: ticket.status || "OPEN",
+    priority: ticket.priority || "MEDIUM",
     attachments: ticket.attachments || [],
     // ADICIONE ESTA LINHA ABAIXO:
     messages: ticket.messages || [], 
-    createdAt: ticket.createdAt.toISOString(),
+    createdAt: (ticket.createdAt instanceof Date ? ticket.createdAt : ticket._id.getTimestamp()).toISOString(),
     client: {
       name: ticketOwner?.name || "Cliente Desconhecido",
       email: ticketOwner?.email || "Sem email",

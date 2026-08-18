@@ -30,10 +30,10 @@ export default async function AdminTicketsPage() {
   // Serializa os dados com proteção contra nulos (optional chaining ?.)
   const tickets = rawTickets.map(t => ({
     id: t._id.toString(),
-    title: t.title,
-    status: t.status,
-    priority: t.priority,
-    createdAt: t.createdAt.toISOString(),
+    title: t.title || "(sem titulo)",
+    status: t.status || "OPEN",
+    priority: t.priority || "MEDIUM",
+    createdAt: (t.createdAt instanceof Date ? t.createdAt : t._id.getTimestamp()).toISOString(),
     clientName: t.clientInfo?.name || "Cliente Desconhecido", // Fallback seguro
     clientEmail: t.clientInfo?.email || "N/A",
   }));
