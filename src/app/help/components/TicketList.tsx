@@ -51,6 +51,7 @@ export function TicketList({
     switch (status) {
       case "OPEN": return "brand.500";
       case "IN_PROGRESS": return "blue.400";
+      case "AWAITING_FEEDBACK": return "purple.400";
       case "RESOLVED": return "green.400";
       case "CLOSED": return "gray.500";
       default: return "gray.400";
@@ -61,6 +62,7 @@ export function TicketList({
     switch (status) {
       case "OPEN": return "Aberto";
       case "IN_PROGRESS": return "Em Progresso";
+      case "AWAITING_FEEDBACK": return "Aguardando feedback";
       case "RESOLVED": return "Resolvido";
       case "CLOSED": return "Fechado";
       default: return status;

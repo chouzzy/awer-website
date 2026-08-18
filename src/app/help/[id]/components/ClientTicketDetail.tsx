@@ -47,6 +47,7 @@ interface TicketDetail {
 const statusConfig: Record<string, { label: string; color: string }> = {
   OPEN:        { label: "Aberto",       color: "brand.500" },
   IN_PROGRESS: { label: "Em Progresso", color: "blue.400" },
+  AWAITING_FEEDBACK: { label: "Aguardando feedback", color: "purple.400" },
   RESOLVED:    { label: "Resolvido",    color: "green.400" },
   CLOSED:      { label: "Fechado",      color: "gray.500" },
 };

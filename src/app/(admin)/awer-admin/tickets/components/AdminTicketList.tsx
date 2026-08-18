@@ -22,12 +22,14 @@ interface TicketAdmin {
   createdAt: string;
   clientName: string;
   clientEmail: string;
+  projectName?: string;
 }
 
 const statusCollection = createListCollection({
   items: [
     { label: "Aberto",       value: "OPEN" },
     { label: "Em Progresso", value: "IN_PROGRESS" },
+    { label: "Aguardando feedback", value: "AWAITING_FEEDBACK" },
     { label: "Resolvido",    value: "RESOLVED" },
     { label: "Fechado",      value: "CLOSED" },
   ],
@@ -53,6 +55,7 @@ const sortCollection = createListCollection({
 const statusColorMap: Record<string, string> = {
   OPEN:        "brand.500",
   IN_PROGRESS: "blue.400",
+  AWAITING_FEEDBACK: "purple.400",
   RESOLVED:    "green.400",
   CLOSED:      "gray.500",
 };
@@ -69,7 +72,8 @@ const priorityLabel: Record<string, string> = {
 };
 
 const statusLabel: Record<string, string> = {
-  OPEN: "Aberto", IN_PROGRESS: "Em Progresso", RESOLVED: "Resolvido", CLOSED: "Fechado",
+  OPEN: "Aberto", IN_PROGRESS: "Em Progresso", AWAITING_FEEDBACK: "Aguardando feedback",
+  RESOLVED: "Resolvido", CLOSED: "Fechado",
 };
 
 // ─── Dialog de confirmação de mudança de status ─────────────────────────────
@@ -147,13 +151,14 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
   const [filterStatus,   setFilterStatus]   = useState("ALL");
   const [filterPriority, setFilterPriority] = useState("ALL");
   const [filterClient,   setFilterClient]   = useState("ALL");
+  const [filterProject,  setFilterProject]  = useState("ALL");
   const [sortOrder,      setSortOrder]      = useState("desc");
   const [searchEmail,    setSearchEmail]    = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  useEffect(() => { setCurrentPage(1); }, [filterStatus, filterPriority, filterClient, sortOrder, searchEmail]);
+  useEffect(() => { setCurrentPage(1); }, [filterStatus, filterPriority, filterClient, filterProject, sortOrder, searchEmail]);
 
   const clientCollection = useMemo(() => {
     const unique = Array.from(new Set(initialTickets.map(t => t.clientName).filter(Boolean)));
@@ -167,6 +172,11 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
     if (filterStatus   !== "ALL") temp = temp.filter(t => t.status   === filterStatus);
     if (filterPriority !== "ALL") temp = temp.filter(t => t.priority === filterPriority);
     if (filterClient   !== "ALL") temp = temp.filter(t => t.clientName === filterClient);
+    if (filterProject  !== "ALL") {
+      temp = filterProject === "__SEM__"
+        ? temp.filter(t => !t.projectName)
+        : temp.filter(t => t.projectName === filterProject);
+    }
     if (searchEmail.trim()) {
       const q = searchEmail.trim().toLowerCase();
       temp = temp.filter(t =>
@@ -178,7 +188,7 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
       return sortOrder === "asc" ? diff : -diff;
     });
     return temp;
-  }, [initialTickets, filterStatus, filterPriority, filterClient, sortOrder, searchEmail]);
+  }, [initialTickets, filterStatus, filterPriority, filterClient, filterProject, sortOrder, searchEmail]);
 
   const totalPages  = Math.ceil(processedTickets.length / itemsPerPage) || 1;
   const currentData = processedTickets.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -214,7 +224,7 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
 
   // ─── Contadores por status ───────────────────────────────────────────────
   const statusCounts = useMemo(() => {
-    const counts: Record<string, number> = { OPEN: 0, IN_PROGRESS: 0, RESOLVED: 0, CLOSED: 0 };
+    const counts: Record<string, number> = { OPEN: 0, IN_PROGRESS: 0, AWAITING_FEEDBACK: 0, RESOLVED: 0, CLOSED: 0 };
     initialTickets.forEach(t => { if (t.status in counts) counts[t.status]++; });
     return counts;
   }, [initialTickets]);
@@ -408,6 +418,9 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
                 <Box flex="1.5" w="100%">
                   <Text color="gray.300" fontSize="sm" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">{ticket.clientName}</Text>
                   <Text color="gray.500" fontSize="xs" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">{ticket.clientEmail}</Text>
+                  {ticket.projectName && (
+                    <Badge mt={1} size="sm" colorPalette="purple" variant="subtle" width="fit-content">{ticket.projectName}</Badge>
+                  )}
                 </Box>
 
                 <Box flex="1" w="100%">

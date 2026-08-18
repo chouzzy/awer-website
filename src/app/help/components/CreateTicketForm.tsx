@@ -17,6 +17,7 @@ import { toaster } from "@/components/ui/toaster";
 import { trackEvent } from "@/lib/analytics";
 
 const ticketSchema = z.object({
+  projectId: z.string().min(1, "Escolha o projeto."),
   title: z.string().min(5, "O título deve ter pelo menos 5 caracteres."),
   description: z.string().min(10, "A descrição deve ter pelo menos 10 caracteres."),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
@@ -40,7 +41,9 @@ const priorityColors: Record<string, string> = {
   URGENT: "red.400",
 };
 
-export function CreateTicketForm({ clientId }: { clientId: string }) {
+interface Projeto { id: string; nome: string; cliente: string }
+
+export function CreateTicketForm({ clientId, projetos = [] }: { clientId: string; projetos?: Projeto[] }) {
   const { user } = useAuth0();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
@@ -48,6 +51,13 @@ export function CreateTicketForm({ clientId }: { clientId: string }) {
   const priorityCollection = useMemo(
     () => createListCollection({ items: priorityOptions.items }),
     []
+  );
+
+  const projetoCollection = useMemo(
+    () => createListCollection({
+      items: projetos.map((p) => ({ value: p.id, label: p.cliente ? `${p.nome} — ${p.cliente}` : p.nome })),
+    }),
+    [projetos]
   );
 
   const {
@@ -59,7 +69,7 @@ export function CreateTicketForm({ clientId }: { clientId: string }) {
     formState: { errors },
   } = useForm<TicketFormValues>({
     resolver: zodResolver(ticketSchema),
-    defaultValues: { priority: "MEDIUM" }
+    defaultValues: { priority: "MEDIUM", projectId: projetos.length === 1 ? projetos[0].id : "" }
   });
 
   const currentPriority = watch("priority");
@@ -73,6 +83,7 @@ export function CreateTicketForm({ clientId }: { clientId: string }) {
       formData.append("description", data.description);
       formData.append("priority", data.priority);
       formData.append("clientId", clientId);
+      formData.append("projectId", data.projectId);
       formData.append("auth0UserId", user?.sub || "");
 
       if (selectedFiles) {
@@ -102,6 +113,54 @@ export function CreateTicketForm({ clientId }: { clientId: string }) {
   return (
     <form onSubmit={handleSubmit(submitCreateTicket)}>
       <Flex direction="column" gap={5}>
+
+        {/* Projeto */}
+        <Box>
+          <Text mb={1} fontSize="sm" color="gray.300" fontWeight="medium">Projeto</Text>
+          <Controller
+            name="projectId"
+            control={control}
+            render={({ field }) => (
+              <Select.Root
+                collection={projetoCollection}
+                value={field.value ? [field.value] : []}
+                onValueChange={({ value }) => field.onChange(value[0])}
+              >
+                <Select.HiddenSelect />
+                <Select.Control>
+                  <Select.Trigger
+                    bg="whiteAlpha.50"
+                    border="1px solid"
+                    borderColor={errors.projectId ? "red.400" : "whiteAlpha.200"}
+                    color="white"
+                    px={3}
+                  >
+                    <Select.ValueText placeholder="Sobre qual projeto é este chamado?" />
+                  </Select.Trigger>
+                  <Select.IndicatorGroup><Select.Indicator /></Select.IndicatorGroup>
+                </Select.Control>
+                <Portal>
+                  <Select.Positioner>
+                    <Select.Content bg="#0F1115" borderColor="whiteAlpha.200">
+                      {projetoCollection.items.map((item) => (
+                        <Select.Item item={item} key={item.value} color="white" _hover={{ bg: "whiteAlpha.100" }}>
+                          {item.label}
+                          <Select.ItemIndicator />
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Positioner>
+                </Portal>
+              </Select.Root>
+            )}
+          />
+          {projetos.length === 0 && (
+            <Text color="orange.300" fontSize="xs" mt={1}>
+              Nenhum projeto liberado para você ainda. Fale com a Awer.
+            </Text>
+          )}
+          {errors.projectId && <Text color="red.400" fontSize="xs" mt={1}>{errors.projectId.message}</Text>}
+        </Box>
 
         {/* Título */}
         <Box>

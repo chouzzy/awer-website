@@ -2,6 +2,7 @@ const getStatusColor = (status: string) => {
     switch (status) {
         case "OPEN": return "brand.500";
         case "IN_PROGRESS": return "blue.400";
+        case "AWAITING_FEEDBACK": return "purple.400";
         case "RESOLVED": return "green.400";
         case "CLOSED": return "gray.500";
         default: return "gray.400";

@@ -11,6 +11,7 @@ const ticketSchema = z.object({
   title: z.string().min(5),
   description: z.string().min(10),
   clientId: z.string().min(1),
+  projectId: z.string().optional(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).default("MEDIUM"),
 });
 
@@ -21,6 +22,7 @@ export async function createTicket(formData: FormData) {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       clientId: formData.get("clientId") as string,
+      projectId: (formData.get("projectId") as string) || undefined,
       priority: formData.get("priority") as string,
     };
 
@@ -63,7 +65,10 @@ export async function createTicket(formData: FormData) {
       title: validatedData.title,
       description: validatedData.description,
       priority: validatedData.priority,
-      clientId: new ObjectId(validatedData.clientId), // <-- A CORREÇÃO ESTÁ AQUI
+      clientId: new ObjectId(validatedData.clientId),
+      ...(validatedData.projectId && ObjectId.isValid(validatedData.projectId)
+        ? { projectId: new ObjectId(validatedData.projectId) }
+        : {}),
       status: "OPEN",
       attachments: uploadedAttachments,
       createdAt: new Date(),

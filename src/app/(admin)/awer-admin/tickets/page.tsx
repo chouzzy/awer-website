@@ -24,6 +24,20 @@ export default async function AdminTicketsPage() {
         preserveNullAndEmptyArrays: true // A MAGIA ESTÁ AQUI: Não apaga tickets sem cliente
       } 
     }, 
+    {
+      $lookup: {
+        from: "projects",
+        localField: "projectId",
+        foreignField: "_id",
+        as: "projectInfo"
+      }
+    },
+    {
+      $unwind: {
+        path: "$projectInfo",
+        preserveNullAndEmptyArrays: true // chamado sem projeto continua aparecendo
+      }
+    },
     { $sort: { createdAt: -1 } }
   ]).toArray();
 
@@ -36,6 +50,7 @@ export default async function AdminTicketsPage() {
     createdAt: (t.createdAt instanceof Date ? t.createdAt : t._id.getTimestamp()).toISOString(),
     clientName: t.clientInfo?.name || "Cliente Desconhecido", // Fallback seguro
     clientEmail: t.clientInfo?.email || "N/A",
+    projectName: t.projectInfo?.nome || "",
   }));
 
   return (
