@@ -47,6 +47,7 @@ export default async function AdminTicketsPage() {
     id: t._id.toString(),
     title: t.title || "(sem titulo)",
     description: t.description || "",
+    tipo: t.tipo || "",
     status: t.status || "OPEN",
     priority: t.priority || "MEDIUM",
     createdAt: (t.createdAt instanceof Date ? t.createdAt : t._id.getTimestamp()).toISOString(),

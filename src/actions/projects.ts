@@ -82,6 +82,7 @@ export async function getTicketsDoUsuario(clientId: string) {
     description: t.description || "",
     status: t.status || "OPEN",
     priority: t.priority || "MEDIUM",
+    tipo: t.tipo || "",
     attachments: t.attachments || [],
     createdAt: (t.createdAt instanceof Date ? t.createdAt : t._id.getTimestamp()).toISOString(),
     clientId: t.clientId ? t.clientId.toString() : "",

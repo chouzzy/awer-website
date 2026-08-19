@@ -27,6 +27,7 @@ interface Ticket {
   clientId: string;
   projectId?: string;
   projectName?: string;
+  tipo?: string;
 }
 
 const STATUS_INFO: Record<string, { label: string; cor: string }> = {
@@ -38,6 +39,12 @@ const STATUS_INFO: Record<string, { label: string; cor: string }> = {
 };
 
 const infoDe = (s: string) => STATUS_INFO[s] || { label: s, cor: "gray.400" };
+
+const TIPO_INFO: Record<string, { label: string; cor: string }> = {
+  CORRECAO: { label: "Correção", cor: "blue.400" },
+  EVOLUCAO: { label: "Evolução", cor: "orange.400" },
+  CONTEUDO: { label: "Conteúdo", cor: "gray.500" },
+};
 
 // Os que ainda estão em curso ficam em cima; o histórico vai para baixo.
 const EM_CURSO = ["OPEN", "IN_PROGRESS", "AWAITING_FEEDBACK"];
@@ -276,6 +283,14 @@ export function TicketList({
                             <Icon as={PiFolderBold} />
                             <Text>{ticket.projectName}</Text>
                           </Flex>
+                        )}
+
+                        {ticket.tipo && TIPO_INFO[ticket.tipo] && (
+                          <Badge size="sm" variant="outline"
+                            borderColor={TIPO_INFO[ticket.tipo].cor}
+                            color={TIPO_INFO[ticket.tipo].cor}>
+                            {TIPO_INFO[ticket.tipo].label}
+                          </Badge>
                         )}
 
                         {ticket.attachments?.length > 0 && (

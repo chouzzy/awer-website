@@ -19,6 +19,7 @@ interface TicketAdmin {
   id: string;
   title: string;
   description?: string;
+  tipo?: string;
   status: string;
   priority: string;
   createdAt: string;
@@ -72,6 +73,22 @@ const priorityColorMap: Record<string, string> = {
 const priorityLabel: Record<string, string> = {
   LOW: "Baixa", MEDIUM: "Média", HIGH: "Alta", URGENT: "Urgente",
 };
+
+const TIPO_INFO: Record<string, { label: string; cor: string }> = {
+  CORRECAO: { label: "Correção", cor: "blue.400" },
+  EVOLUCAO: { label: "Evolução", cor: "orange.400" },
+  CONTEUDO: { label: "Conteúdo", cor: "gray.500" },
+};
+
+const filterTipoCollection = createListCollection({
+  items: [
+    { label: "Correção e evolução", value: "ALL" },
+    { label: "Só correções",        value: "CORRECAO" },
+    { label: "Só evoluções",        value: "EVOLUCAO" },
+    { label: "Só conteúdo",         value: "CONTEUDO" },
+    { label: "— sem classificar —", value: "__SEM__" },
+  ],
+});
 
 const statusLabel: Record<string, string> = {
   OPEN: "Aberto", IN_PROGRESS: "Em Progresso", AWAITING_FEEDBACK: "Aguardando feedback",
@@ -154,13 +171,14 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
   const [filterPriority, setFilterPriority] = useState("ALL");
   const [filterClient,   setFilterClient]   = useState("ALL");
   const [filterProject,  setFilterProject]  = useState("ALL");
+  const [filterTipo,     setFilterTipo]     = useState("ALL");
   const [sortOrder,      setSortOrder]      = useState("desc");
   const [searchEmail,    setSearchEmail]    = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  useEffect(() => { setCurrentPage(1); }, [filterStatus, filterPriority, filterClient, filterProject, sortOrder, searchEmail]);
+  useEffect(() => { setCurrentPage(1); }, [filterStatus, filterPriority, filterClient, filterProject, filterTipo, sortOrder, searchEmail]);
 
   const clientCollection = useMemo(() => {
     const unique = Array.from(new Set(initialTickets.map(t => t.clientName).filter(Boolean)));
@@ -186,6 +204,11 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
     if (filterStatus   !== "ALL") temp = temp.filter(t => t.status   === filterStatus);
     if (filterPriority !== "ALL") temp = temp.filter(t => t.priority === filterPriority);
     if (filterClient   !== "ALL") temp = temp.filter(t => t.clientName === filterClient);
+    if (filterTipo !== "ALL") {
+      temp = filterTipo === "__SEM__"
+        ? temp.filter(t => !t.tipo)
+        : temp.filter(t => t.tipo === filterTipo);
+    }
     if (filterProject  !== "ALL") {
       temp = filterProject === "__SEM__"
         ? temp.filter(t => !t.projectName)
@@ -202,7 +225,7 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
       return sortOrder === "asc" ? diff : -diff;
     });
     return temp;
-  }, [initialTickets, filterStatus, filterPriority, filterClient, filterProject, sortOrder, searchEmail]);
+  }, [initialTickets, filterStatus, filterPriority, filterClient, filterProject, filterTipo, sortOrder, searchEmail]);
 
   const totalPages  = Math.ceil(processedTickets.length / itemsPerPage) || 1;
   const currentData = processedTickets.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -321,6 +344,25 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
                   <Select.Positioner>
                     <Select.Content bg="#0F1115" borderColor="whiteAlpha.200">
                       {filterPriorityCollection.items.map(item => (
+                        <Select.Item item={item} key={item.value} _hover={{ bg: "whiteAlpha.100" }} color="white" cursor="pointer">
+                          {item.label} <Select.ItemIndicator />
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Positioner>
+                </Portal>
+              </Select.Root>
+            </Box>
+
+            <Box flex={1} minW="150px">
+              <Text fontSize="xs" color="gray.400" mb={1} textTransform="uppercase">Natureza</Text>
+              <Select.Root collection={filterTipoCollection} value={[filterTipo]} onValueChange={(e) => setFilterTipo(e.value[0])} size="sm">
+                <Select.HiddenSelect />
+                <Select.Control><Select.Trigger color="white" borderColor="whiteAlpha.200"><Select.ValueText /></Select.Trigger></Select.Control>
+                <Portal>
+                  <Select.Positioner>
+                    <Select.Content bg="#0F1115" borderColor="whiteAlpha.200">
+                      {filterTipoCollection.items.map(item => (
                         <Select.Item item={item} key={item.value} _hover={{ bg: "whiteAlpha.100" }} color="white" cursor="pointer">
                           {item.label} <Select.ItemIndicator />
                         </Select.Item>
@@ -453,9 +495,17 @@ export function AdminTicketList({ initialTickets }: { initialTickets: TicketAdmi
                 <Box flex="1.5" w="100%">
                   <Text color="gray.300" fontSize="sm" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">{ticket.clientName}</Text>
                   <Text color="gray.500" fontSize="xs" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">{ticket.clientEmail}</Text>
-                  {ticket.projectName && (
-                    <Badge mt={1} size="sm" colorPalette="purple" variant="subtle" width="fit-content">{ticket.projectName}</Badge>
-                  )}
+                  <Flex gap={1} mt={1} wrap="wrap">
+                    {ticket.projectName && (
+                      <Badge size="sm" colorPalette="purple" variant="subtle" width="fit-content">{ticket.projectName}</Badge>
+                    )}
+                    {ticket.tipo && TIPO_INFO[ticket.tipo] && (
+                      <Badge size="sm" variant="outline" width="fit-content"
+                        borderColor={TIPO_INFO[ticket.tipo].cor} color={TIPO_INFO[ticket.tipo].cor}>
+                        {TIPO_INFO[ticket.tipo].label}
+                      </Badge>
+                    )}
+                  </Flex>
                 </Box>
 
                 <Box flex="1" w="100%">
