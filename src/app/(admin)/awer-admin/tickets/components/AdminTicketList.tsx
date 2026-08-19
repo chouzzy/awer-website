@@ -78,6 +78,7 @@ const TIPO_INFO: Record<string, { label: string; cor: string }> = {
   CORRECAO: { label: "Correção", cor: "blue.400" },
   EVOLUCAO: { label: "Evolução", cor: "orange.400" },
   CONTEUDO: { label: "Conteúdo", cor: "gray.500" },
+  OPERACAO: { label: "Operação", cor: "teal.400" },
 };
 
 const filterTipoCollection = createListCollection({
@@ -86,6 +87,7 @@ const filterTipoCollection = createListCollection({
     { label: "Só correções",        value: "CORRECAO" },
     { label: "Só evoluções",        value: "EVOLUCAO" },
     { label: "Só conteúdo",         value: "CONTEUDO" },
+    { label: "Só operação",        value: "OPERACAO" },
     { label: "— sem classificar —", value: "__SEM__" },
   ],
 });

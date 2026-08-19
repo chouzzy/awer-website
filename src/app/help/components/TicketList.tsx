@@ -44,6 +44,7 @@ const TIPO_INFO: Record<string, { label: string; cor: string }> = {
   CORRECAO: { label: "Correção", cor: "blue.400" },
   EVOLUCAO: { label: "Evolução", cor: "orange.400" },
   CONTEUDO: { label: "Conteúdo", cor: "gray.500" },
+  OPERACAO: { label: "Operação", cor: "teal.400" },
 };
 
 // Os que ainda estão em curso ficam em cima; o histórico vai para baixo.
