@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PiCookie } from 'react-icons/pi';
+import { updateConsent, CONSENT_STORAGE_KEY, CookieConsent } from '@/lib/analytics';
 
 // ============================================================================
 //   COMPONENTE PRINCIPAL: CookieConsentBanner
@@ -24,7 +25,12 @@ export function CookieConsentBanner() {
     // Efeito que corre uma vez quando o componente é montado no cliente
     useEffect(() => {
         // Verifica no localStorage se o utilizador já deu o seu consentimento
-        const consent = localStorage.getItem('cookie_consent');
+        let consent: string | null = null;
+        try {
+            consent = localStorage.getItem(CONSENT_STORAGE_KEY);
+        } catch {
+            consent = null;
+        }
         // Se não houver nenhum registo de consentimento, mostra o banner
         if (!consent) {
             setIsVisible(true);
@@ -32,9 +38,15 @@ export function CookieConsentBanner() {
     }, []);
 
     // Função para lidar com a decisão do utilizador
-    const handleConsent = (consent: 'accepted' | 'rejected') => {
+    const handleConsent = (consent: CookieConsent) => {
+        // Aplica a escolha no Google Consent Mode (Rejeitar mantém o rastreamento sem cookies)
+        updateConsent(consent);
         // Guarda a escolha no localStorage para visitas futuras
-        localStorage.setItem('cookie_consent', consent);
+        try {
+            localStorage.setItem(CONSENT_STORAGE_KEY, consent);
+        } catch {
+            // navegação privada ou armazenamento bloqueado: a escolha vale só para esta visita
+        }
         // Esconde o banner
         setIsVisible(false);
     };

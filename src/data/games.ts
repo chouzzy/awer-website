@@ -73,7 +73,7 @@ export const games: Game[] = [
         badge: 'Estagiário → CTO',
         description:
             'Você é dev estagiário. Cada carta é um dilema do dia a dia em tech. Chegue a CTO sem deixar nenhum medidor zerar ou estourar.',
-        url: 'https://sobe-ou-some.vercel.app/',
+        url: 'https://sobeousome.awer.co/',
         image: '/games/sobe-ou-some.webp',
         imageAlt: 'Tela do Sobe ou Some com os quatro medidores e uma carta de decisão',
         features: [

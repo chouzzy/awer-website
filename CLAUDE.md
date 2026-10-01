@@ -295,6 +295,11 @@ Utilitário centralizado em `src/lib/analytics.ts` — função `trackEvent({ ev
 
 Para adicionar novo evento: chamar `trackEvent({ event: 'nome_evento', ...parametros })` no componente.
 
+### Consentimento de cookies (LGPD)
+- Google Consent Mode v2: `GoogleTagManager.tsx` define tudo como `denied` antes do GTM carregar e restaura `granted` se `localStorage.cookie_consent === 'accepted'`.
+- `CookieConsentBanner.tsx` chama `updateConsent()` (`src/lib/analytics.ts`) em Aceitar/Rejeitar e dispara o evento `cookie_consent_update`.
+- Tags do Google (GA4, Ads) respeitam o consentimento sozinhas. **Tags de terceiros no container GTM (ex.: Meta Pixel) precisam de condição de consentimento configurada no próprio GTM**, senão disparam mesmo com Rejeitar.
+
 ---
 
 ## Sistema de Chamados (Help Awer) — Estado Atual
