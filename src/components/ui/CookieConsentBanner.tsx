@@ -49,45 +49,41 @@ export function CookieConsentBanner() {
                     transition={{ duration: 0.5, ease: 'easeInOut' }}
                     style={{
                         position: 'fixed',
-                        bottom: '1rem',
-                        left: '1rem',
-                        right: '1rem',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
                         zIndex: 10000, // Garante que fica por cima da maioria dos conteúdos
                     }}
                 >
+                    {/* Barra compacta no rodapé da tela: não cobre o conteúdo principal */}
                     <Flex
                         w="100%"
-                        zIndex={4}
-                        maxW={'5xl'}
-                        mx="auto"
-                        p={4}
+                        px={{ base: 4, md: 8 }}
+                        py={{ base: 3, md: 2.5 }}
                         bg="gunMetal"
                         color="white"
-                        borderRadius="xl"
-                        boxShadow="2xl"
-                        align={{ base: 'flex-start', md: 'center' }}
-                        justify="space-between"
-                        gap={4}
-                        direction={{ base: 'column', md: 'row' }}
+                        borderTop="1px solid rgba(255,255,255,0.08)"
+                        boxShadow="0 -8px 24px rgba(0,0,0,0.35)"
+                        align="center"
+                        justify="center"
+                        gap={{ base: 3, md: 6 }}
+                        direction={{ base: 'column', sm: 'row' }}
                     >
-                        <HStack gap={3} align="center">
-                            <Icon as={PiCookie} boxSize={8} color="brand.400" mt={1} />
-                            <Box>
-                                <Text fontWeight="bold">Este site utiliza cookies</Text>
-                                <Text fontSize="xs" color="gray.300">
-                                    Utilizamos cookies para melhorar a sua experiência de navegação e analisar o nosso tráfego. Ao clicar em "Aceitar", você concorda com o nosso uso de cookies. Leia a nossa{' '}
-                                    <ChakraLink href="/politica-de-privacidade" textDecoration="underline" _hover={{ color: 'brand.300' }}>
-                                        Política de Privacidade
-                                    </ChakraLink>.
-                                </Text>
-                            </Box>
+                        <HStack gap={2.5} align="center" maxW="3xl">
+                            <Icon as={PiCookie} boxSize={5} color="brand.400" flexShrink={0} display={{ base: 'none', sm: 'block' }} />
+                            <Text fontSize="xs" color="gray.300" lineHeight="1.45">
+                                Usamos cookies para melhorar sua navegação e analisar o tráfego.{' '}
+                                <ChakraLink href="/politica-de-privacidade" textDecoration="underline" color="gray.100" _hover={{ color: 'brand.300' }}>
+                                    Política de Privacidade
+                                </ChakraLink>
+                            </Text>
                         </HStack>
 
-                        <HStack gap={3} flexShrink={0}>
-                            <Button bgColor={'brand.900'} variant="outline" size="sm" onClick={() => handleConsent('rejected')}>
+                        <HStack gap={2} flexShrink={0}>
+                            <Button variant="outline" size="xs" px={3} borderColor="whiteAlpha.400" color="gray.200" _hover={{ bg: 'whiteAlpha.100' }} onClick={() => handleConsent('rejected')}>
                                 Rejeitar
                             </Button>
-                            <Button colorScheme="brand" size="sm" onClick={() => handleConsent('accepted')}>
+                            <Button size="xs" px={4} bg="brand.500" color="white" _hover={{ bg: 'brand.600' }} onClick={() => handleConsent('accepted')}>
                                 Aceitar
                             </Button>
                         </HStack>

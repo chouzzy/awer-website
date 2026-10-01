@@ -192,6 +192,7 @@ export default function GamesPage() {
     <Box
       as="main"
       w="100%"
+      mb={{ base: -8, md: -16 }} // anula o mt do Footer para o fundo da página encostar no rodapé
       bg="#0A0D18"
       color="#E9ECF5"
       fontFamily={BODY}
