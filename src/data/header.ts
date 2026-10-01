@@ -20,8 +20,8 @@ export const headerData = {
             href: '/tecnologia/botrt'
         },
         {
-            title: 'Awer Shop',
-            href: 'https://awer-shop.vercel.app/'
+            title: 'Awer Games',
+            href: '/games'
         },
         {
             title: 'Nossa História',

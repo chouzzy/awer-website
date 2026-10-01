@@ -100,6 +100,7 @@ src/
 | `/tecnologia/ecommerce` | E-commerce |
 | `/tecnologia/landing-pages` | Landing pages |
 | `/consultoria` | Consultoria |
+| `/games` | Awer Games: vitrine dos jogos (dados em `src/data/games.ts`, links externos) |
 | `/help` | Sistema de suporte (client-side filtering) |
 | `/help/[id]` | Detalhe do ticket |
 
@@ -214,7 +215,7 @@ SPACES_SECRET_KEY
 SPACES_APP_FOLDER
 ```
 
-> **⚠️ ATENÇÃO SEGURANÇA:** O arquivo `.env` está commitado no Git com segredos em texto puro. Mover para variáveis de ambiente do Vercel e adicionar `.env` ao `.gitignore` é prioridade.
+> **Segurança (verificado em 01/10/2026):** nenhum `.env` no histórico das 19 branches e nenhum segredo encontrado por varredura de padrões. `.env*` já está no `.gitignore`. O repositório é público: nunca commitar credenciais.
 
 ---
 
@@ -290,6 +291,7 @@ Utilitário centralizado em `src/lib/analytics.ts` — função `trackEvent({ ev
 | `whatsapp_click` | Botão WhatsApp flutuante + botões CTA nas páginas de serviço |
 | `ticket_create` | Criação de chamado de suporte (`CreateTicketForm.tsx`) |
 | `ticket_message_send` | Envio de mensagem num chamado (`ClientTicketDetail.tsx`) |
+| `game_click` | Botão "Jogar agora" em `/games` (param `game` = slug) |
 
 Para adicionar novo evento: chamar `trackEvent({ event: 'nome_evento', ...parametros })` no componente.
 
@@ -361,6 +363,7 @@ Todo o conteúdo do site está em `src/data/`:
 - `testimonials.ts` — depoimentos de clientes
 - `gestao.ts` — soluções de gestão
 - `clientLogos.ts` — logos dos clientes
+- `games.ts` — jogos exibidos em `/games` (título, link, print e cores)
 - `footer.ts`, `header.ts` — estrutura de navegação
 
 Edite esses arquivos para atualizar o conteúdo sem mexer nos componentes.

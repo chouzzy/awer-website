@@ -27,6 +27,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/gestao/gestao-financeira`,           priority: 0.8,  changeFrequency: "monthly",  lastModified: new Date() },
     { url: `${base}/gestao/apoio-operacional`,           priority: 0.8,  changeFrequency: "monthly",  lastModified: new Date() },
 
+    // ── Awer Games ────────────────────────────────────────────────────
+    { url: `${base}/games`,                              priority: 0.7,  changeFrequency: "monthly",  lastModified: new Date() },
+
     // ── Institucional ─────────────────────────────────────────────────
     { url: `${base}/nossa-historia`,                     priority: 0.6,  changeFrequency: "yearly",   lastModified: new Date() },
     { url: `${base}/politica-de-privacidade`,            priority: 0.2,  changeFrequency: "yearly",   lastModified: new Date() },
