@@ -19,6 +19,23 @@ export interface AdminUser {
 const cache = new Map<string, { user: AdminUser; expires: number }>();
 const CACHE_MS = 5 * 60 * 1000;
 
+// Exceção TEMPORÁRIA para contas @awer.co ainda sem e-mail verificado no Auth0.
+// Variável ADMIN_LIBERADOS_SEM_VERIFICACAO na Vercel, formato "email|sub" separados por vírgula,
+// ex.: "fernando@awer.co|auth0|abc123". Exige e-mail E sub (id da conta) iguais, para que outra conta
+// criada com o mesmo e-mail não entre. Remover a variável quando o e-mail for verificado no Auth0.
+function liberadoSemVerificacao(email: string, sub: string | undefined): boolean {
+  if (!sub) return false;
+  const lista = (process.env.ADMIN_LIBERADOS_SEM_VERIFICACAO ?? "")
+    .split(",")
+    .map((x) => x.trim())
+    .filter(Boolean);
+  return lista.some((item) => {
+    const i = item.indexOf("|");
+    if (i < 0) return false;
+    return item.slice(0, i).toLowerCase() === email && item.slice(i + 1) === sub;
+  });
+}
+
 function userinfoUrl(): string {
   // AUTH0_USERINFO_URL só existe para testes locais; em produção vem do domínio do Auth0.
   if (process.env.AUTH0_USERINFO_URL) return process.env.AUTH0_USERINFO_URL;
@@ -49,14 +66,14 @@ export async function verifyAdminTokenDetailed(
       console.warn(`[adminAuth] negado: /userinfo respondeu ${res.status}`);
       return { user: null, reason: "token_recusado" };
     }
-    const info = (await res.json()) as { email?: string; email_verified?: boolean; name?: string };
+    const info = (await res.json()) as { sub?: string; email?: string; email_verified?: boolean; name?: string };
     const email = typeof info.email === "string" ? info.email.toLowerCase() : "";
     if (!email.endsWith(ADMIN_DOMAIN)) {
       console.warn(`[adminAuth] negado: e-mail fora do domínio (${email ? email.split("@")[1] : "sem e-mail no /userinfo"})`);
       return { user: null, reason: "fora_do_dominio" };
     }
-    if (info.email_verified !== true) {
-      console.warn(`[adminAuth] negado: ${email} com email_verified=${String(info.email_verified)}`);
+    if (info.email_verified !== true && !liberadoSemVerificacao(email, info.sub)) {
+      console.warn(`[adminAuth] negado: ${email} (sub ${info.sub ?? "?"}) com email_verified=${String(info.email_verified)}`);
       return { user: null, reason: "email_nao_verificado" };
     }
     const user = { email, name: info.name || email };

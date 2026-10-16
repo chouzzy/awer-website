@@ -122,6 +122,7 @@ src/
 - **Padrão obrigatório para telas novas:** o navegador manda o access token do Auth0 (`getAccessTokenSilently()`) para a server action, que chama `verifyAdminToken()` em `src/lib/adminAuth.ts`. Ele consulta o `/userinfo` do Auth0 e só aceita e-mail `@awer.co` **verificado**. Nunca confiar em e-mail ou `clientId` enviados pelo navegador.
 - Guardas só no navegador (como o layout de `botrt`) são cosméticos: não protegem os dados.
 - `AUTH0_USERINFO_URL` existe só para testes locais (aponta para um servidor falso).
+- `ADMIN_LIBERADOS_SEM_VERIFICACAO` (Vercel, server-only): exceção **temporária** para conta @awer.co sem e-mail verificado no Auth0, no formato `email|sub`. Exige e-mail e sub iguais. Remover quando o e-mail for verificado.
 
 ### API Routes
 | Endpoint | Método | Função |
