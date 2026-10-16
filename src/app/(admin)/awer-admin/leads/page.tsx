@@ -71,6 +71,7 @@ export default function AdminLeadsPage() {
     setState("loading");
     try {
       const token = await getAccessTokenSilently();
+      if (!token) { setState("denied"); return; }
       const res = await getLeadsEscala6x1(token);
       if (res.ok) {
         setLeads(res.data);
@@ -93,6 +94,7 @@ export default function AdminLeadsPage() {
     setLeads((ls) => ls?.map((l) => (l.id === id ? { ...l, ...(changes as Partial<LeadAdmin>) } : l)) ?? ls);
     try {
       const token = await getAccessTokenSilently();
+      if (!token) throw new Error("sem token");
       const res = await updateLeadEscala6x1(token, id, changes);
       if (!res.ok) throw new Error(res.error);
       toaster.create({ title: changes.status ? "Status atualizado" : "Nota salva", type: "success", duration: 1800 });
