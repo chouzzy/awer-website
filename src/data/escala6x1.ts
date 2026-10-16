@@ -14,6 +14,18 @@ export const SEGMENTOS = [
   "Outro",
 ] as const;
 
+// Etapas do lead na base do admin (/awer-admin/leads)
+export const LEAD_STATUS = [
+  { value: "novo", label: "Novo", color: "brand.400" },
+  { value: "em_contato", label: "Em contato", color: "blue.300" },
+  { value: "diagnostico", label: "Diagnóstico", color: "purple.300" },
+  { value: "proposta", label: "Proposta", color: "orange.300" },
+  { value: "cliente", label: "Cliente", color: "green.300" },
+  { value: "descartado", label: "Descartado", color: "gray.500" },
+] as const;
+
+export type LeadStatus = (typeof LEAD_STATUS)[number]["value"];
+
 export const escala6x1Video = {
   src: "/escala-6x1/planejador-escalas-6x1.mp4",
   poster: "/escala-6x1/planejador-escalas-6x1-capa.webp",

@@ -8,6 +8,8 @@ import { headers } from "next/headers";
 import clientPromise from "@/lib/mongodb";
 
 import { FAIXAS_FUNCIONARIOS, SEGMENTOS } from "@/data/escala6x1";
+import { verifyAdminToken } from "@/lib/adminAuth";
+import { listLeads, updateLead, isLeadStatus, type LeadAdmin, type LeadStatus } from "@/lib/leadsAdmin";
 
 const leadSchema = z.object({
   nome: z.string().trim().min(3, "Informe seu nome").max(120),
@@ -63,5 +65,48 @@ export async function createLeadEscala6x1(input: LeadEscalaInput): Promise<LeadE
   } catch (err) {
     console.error("[leads] falha ao gravar lead escala 6x1", err);
     return { ok: false, error: "Não conseguimos registrar agora. Fale com a gente pelo WhatsApp." };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Admin: base de leads (/awer-admin/leads)
+// Toda chamada exige o access token do Auth0, verificado no servidor (@awer.co verificado).
+// ---------------------------------------------------------------------------
+
+export type AdminResult<T> = { ok: true; data: T } | { ok: false; error: "unauthorized" | "invalid" | "server" };
+
+export async function getLeadsEscala6x1(accessToken: string): Promise<AdminResult<LeadAdmin[]>> {
+  const admin = await verifyAdminToken(accessToken);
+  if (!admin) return { ok: false, error: "unauthorized" };
+  try {
+    const client = await clientPromise;
+    return { ok: true, data: await listLeads(client.db("help_awer")) };
+  } catch (err) {
+    console.error("[leads] falha ao listar", err);
+    return { ok: false, error: "server" };
+  }
+}
+
+export async function updateLeadEscala6x1(
+  accessToken: string,
+  id: string,
+  changes: { status?: string; nota?: string },
+): Promise<AdminResult<null>> {
+  const admin = await verifyAdminToken(accessToken);
+  if (!admin) return { ok: false, error: "unauthorized" };
+  if (changes.status !== undefined && !isLeadStatus(changes.status)) return { ok: false, error: "invalid" };
+  if (changes.nota !== undefined && typeof changes.nota !== "string") return { ok: false, error: "invalid" };
+  try {
+    const client = await clientPromise;
+    const ok = await updateLead(
+      client.db("help_awer"),
+      id,
+      { status: changes.status as LeadStatus | undefined, nota: changes.nota },
+      admin.email,
+    );
+    return ok ? { ok: true, data: null } : { ok: false, error: "invalid" };
+  } catch (err) {
+    console.error("[leads] falha ao atualizar", err);
+    return { ok: false, error: "server" };
   }
 }

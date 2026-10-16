@@ -89,6 +89,11 @@ export function HeaderMobileMenu({ isAuthenticated, isAwerClient, isAdmin }: Hea
                                                 Projetos
                                             </ChakraLink>
                                         </Menu.Item>
+                                        <Menu.Item value="leads-admin" asChild>
+                                            <ChakraLink href="/awer-admin/leads" w="100%" px={3} py={2} bg="gray.700" color="white">
+                                                Leads
+                                            </ChakraLink>
+                                        </Menu.Item>
                                         <Menu.Item value="botrt-admin" asChild>
                                             <ChakraLink href="/awer-admin/botrt/usuarios" w="100%" px={3} py={2} bg="gray.700" color="white">
                                                 BoTRT Admin

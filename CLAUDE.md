@@ -116,6 +116,12 @@ src/
 |------|--------|
 | `/(admin)/awer-admin/tickets` | Gestão de tickets — admin |
 | `/(admin)/awer-admin/tickets/[id]` | Detalhe do ticket — admin |
+| `/(admin)/awer-admin/leads` | Base de leads do `/escala-6x1`: status, nota, WhatsApp, exportar CSV. Protegida no servidor (ver abaixo) |
+
+### Proteção do admin no servidor
+- **Padrão obrigatório para telas novas:** o navegador manda o access token do Auth0 (`getAccessTokenSilently()`) para a server action, que chama `verifyAdminToken()` em `src/lib/adminAuth.ts`. Ele consulta o `/userinfo` do Auth0 e só aceita e-mail `@awer.co` **verificado**. Nunca confiar em e-mail ou `clientId` enviados pelo navegador.
+- Guardas só no navegador (como o layout de `botrt`) são cosméticos: não protegem os dados.
+- `AUTH0_USERINFO_URL` existe só para testes locais (aponta para um servidor falso).
 
 ### API Routes
 | Endpoint | Método | Função |
@@ -141,7 +147,8 @@ src/
 
 **`leads_escala_6x1`** — Leads da página `/escala-6x1`
 - Gravados pela server action `createLeadEscala6x1()` em `src/actions/leads.ts` (zod + campo isca anti-robô)
-- Campos: nome, empresa, whatsapp (só dígitos), email, funcionarios, segmento, origem, status (`novo`), userAgent, referer, createdAt
+- Campos: nome, empresa, whatsapp (só dígitos), email, funcionarios, segmento, origem, status (`novo`, `em_contato`, `diagnostico`, `proposta`, `cliente`, `descartado`), nota, updatedBy, updatedAt, userAgent, referer, createdAt
+- Leitura e edição no admin via `getLeadsEscala6x1()` / `updateLeadEscala6x1()` (exigem token admin); consultas em `src/lib/leadsAdmin.ts`
 
 **`tickets`** — Tickets de suporte
 ```ts
@@ -367,6 +374,9 @@ Todas seguem o mesmo padrão visual: dark theme, `brand.500` como accent, anima�
 | Arquivo | Linha | Descrição |
 |---------|-------|-----------|
 | `src/app/pagamento/sucesso/page.tsx` | — | Adicionar link real de download do app |
+| `src/app/(admin)/awer-admin/tickets/page.tsx`, `projetos/page.tsx` | — | **SEGURANÇA (encontrado em 16/10/2026):** renderizam no servidor sem checar quem acessa; qualquer visitante recebe nomes, e-mails e chamados dos clientes. Aplicar o padrão de `verifyAdminToken` |
+| `src/actions/tickets.ts`, `src/actions/projects.ts` | — | **SEGURANÇA:** confiam em `clientId`/papel enviados pelo navegador; dá para agir como outro usuário. Verificar o token no servidor |
+| `src/actions/leads.ts` | — | Aviso de novo lead por e-mail (SendGrid do sócio, pendente de acesso) |
 
 ---
 
