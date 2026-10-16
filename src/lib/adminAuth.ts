@@ -16,7 +16,7 @@ export interface AdminUser {
 }
 
 // Cache curto por token: o /userinfo do Auth0 tem limite de chamadas por usuário.
-const cache = new Map<string, { user: AdminUser | null; expires: number }>();
+const cache = new Map<string, { user: AdminUser; expires: number }>();
 const CACHE_MS = 5 * 60 * 1000;
 
 function userinfoUrl(): string {
@@ -27,32 +27,48 @@ function userinfoUrl(): string {
   return `https://${domain}/userinfo`;
 }
 
-export async function verifyAdminToken(accessToken: unknown): Promise<AdminUser | null> {
-  if (typeof accessToken !== "string" || accessToken.length < 20 || accessToken.length > 8000) return null;
+export type AdminDenyReason = "sem_token" | "token_recusado" | "email_nao_verificado" | "fora_do_dominio" | "erro_auth0";
+
+export async function verifyAdminTokenDetailed(
+  accessToken: unknown,
+): Promise<{ user: AdminUser | null; reason?: AdminDenyReason }> {
+  if (typeof accessToken !== "string" || accessToken.length < 20 || accessToken.length > 8000) {
+    return { user: null, reason: "sem_token" };
+  }
 
   const now = Date.now();
   const hit = cache.get(accessToken);
-  if (hit && hit.expires > now) return hit.user;
+  if (hit && hit.expires > now && hit.user) return { user: hit.user };
 
-  let user: AdminUser | null = null;
   try {
     const res = await fetch(userinfoUrl(), {
       headers: { Authorization: `Bearer ${accessToken}` },
       cache: "no-store",
     });
-    if (res.ok) {
-      const info = (await res.json()) as { email?: string; email_verified?: boolean; name?: string };
-      const email = typeof info.email === "string" ? info.email.toLowerCase() : "";
-      if (email.endsWith(ADMIN_DOMAIN) && info.email_verified === true) {
-        user = { email, name: info.name || email };
-      }
+    if (!res.ok) {
+      console.warn(`[adminAuth] negado: /userinfo respondeu ${res.status}`);
+      return { user: null, reason: "token_recusado" };
     }
+    const info = (await res.json()) as { email?: string; email_verified?: boolean; name?: string };
+    const email = typeof info.email === "string" ? info.email.toLowerCase() : "";
+    if (!email.endsWith(ADMIN_DOMAIN)) {
+      console.warn(`[adminAuth] negado: e-mail fora do domínio (${email ? email.split("@")[1] : "sem e-mail no /userinfo"})`);
+      return { user: null, reason: "fora_do_dominio" };
+    }
+    if (info.email_verified !== true) {
+      console.warn(`[adminAuth] negado: ${email} com email_verified=${String(info.email_verified)}`);
+      return { user: null, reason: "email_nao_verificado" };
+    }
+    const user = { email, name: info.name || email };
+    if (cache.size > 500) cache.clear();
+    cache.set(accessToken, { user, expires: now + CACHE_MS }); // só aprovações vão para o cache
+    return { user };
   } catch (err) {
     console.error("[adminAuth] falha ao consultar o Auth0", err);
-    return null; // falha de rede não entra no cache
+    return { user: null, reason: "erro_auth0" };
   }
+}
 
-  if (cache.size > 500) cache.clear();
-  cache.set(accessToken, { user, expires: now + CACHE_MS });
-  return user;
+export async function verifyAdminToken(accessToken: unknown): Promise<AdminUser | null> {
+  return (await verifyAdminTokenDetailed(accessToken)).user;
 }

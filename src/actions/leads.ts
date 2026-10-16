@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 import clientPromise from "@/lib/mongodb";
 
 import { FAIXAS_FUNCIONARIOS, SEGMENTOS } from "@/data/escala6x1";
-import { verifyAdminToken } from "@/lib/adminAuth";
+import { verifyAdminToken, verifyAdminTokenDetailed, type AdminDenyReason } from "@/lib/adminAuth";
 import { listLeads, updateLead, isLeadStatus, type LeadAdmin, type LeadStatus } from "@/lib/leadsAdmin";
 
 const leadSchema = z.object({
@@ -73,11 +73,13 @@ export async function createLeadEscala6x1(input: LeadEscalaInput): Promise<LeadE
 // Toda chamada exige o access token do Auth0, verificado no servidor (@awer.co verificado).
 // ---------------------------------------------------------------------------
 
-export type AdminResult<T> = { ok: true; data: T } | { ok: false; error: "unauthorized" | "invalid" | "server" };
+export type AdminResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; error: "unauthorized" | "invalid" | "server"; reason?: AdminDenyReason };
 
 export async function getLeadsEscala6x1(accessToken: string): Promise<AdminResult<LeadAdmin[]>> {
-  const admin = await verifyAdminToken(accessToken);
-  if (!admin) return { ok: false, error: "unauthorized" };
+  const { user: admin, reason } = await verifyAdminTokenDetailed(accessToken);
+  if (!admin) return { ok: false, error: "unauthorized", reason };
   try {
     const client = await clientPromise;
     return { ok: true, data: await listLeads(client.db("help_awer")) };

@@ -62,6 +62,7 @@ export default function AdminLeadsPage() {
   const { isLoading: authLoading, isAuthenticated, user, getAccessTokenSilently, loginWithRedirect } = useAuth0();
   const [leads, setLeads] = useState<LeadAdmin[] | null>(null);
   const [state, setState] = useState<"idle" | "loading" | "denied" | "error">("idle");
+  const [denyReason, setDenyReason] = useState<string>("");
   const [busca, setBusca] = useState("");
   const [filtroStatus, setFiltroStatus] = useState("ativos");
   const [filtroSegmento, setFiltroSegmento] = useState("todos");
@@ -71,13 +72,14 @@ export default function AdminLeadsPage() {
     setState("loading");
     try {
       const token = await getAccessTokenSilently();
-      if (!token) { setState("denied"); return; }
+      if (!token) { setDenyReason("sem_token"); setState("denied"); return; }
       const res = await getLeadsEscala6x1(token);
       if (res.ok) {
         setLeads(res.data);
         setNotas(Object.fromEntries(res.data.map((l) => [l.id, l.nota])));
         setState("idle");
       } else {
+        setDenyReason(res.error === "unauthorized" ? res.reason ?? "" : "");
         setState(res.error === "unauthorized" ? "denied" : "error");
       }
     } catch {
@@ -140,6 +142,17 @@ export default function AdminLeadsPage() {
       <Flex w="100%" h="50vh" align="center" justify="center" direction="column" gap={4} px={4} textAlign="center">
         <Text color="gray.300" fontSize="lg">Acesso restrito à equipe Awer.</Text>
         {isAuthenticated && <Text color="gray.500" fontSize="sm">Conectado como {user?.email}. É preciso um e-mail @awer.co verificado.</Text>}
+        {isAuthenticated && denyReason && (
+          <Text color="gray.500" fontSize="xs">
+            Motivo: {{
+              sem_token: "o login não gerou um token de acesso",
+              token_recusado: "o Auth0 recusou o token de acesso",
+              email_nao_verificado: "o e-mail não está marcado como verificado no Auth0",
+              fora_do_dominio: "o Auth0 não devolveu um e-mail @awer.co",
+              erro_auth0: "não foi possível consultar o Auth0",
+            }[denyReason] ?? denyReason}
+          </Text>
+        )}
         <Button size="sm" variant="outline" onClick={() => loginWithRedirect({ authorizationParams: { prompt: "login" }, appState: { returnTo: "/awer-admin/leads" } })}>
           {isAuthenticated ? "Entrar com outra conta" : "Entrar"}
         </Button>
