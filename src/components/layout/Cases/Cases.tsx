@@ -189,7 +189,7 @@ export function Cases({ c }: CasesDataProps) {
                     </Flex>
 
                     {/* Botão "Saiba Mais" */}
-                    <Link href={c.link} target="_blank">
+                    <Link href={c.link} {...(c.link?.startsWith("/") ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
                         <Flex p={{ base: 4, md: 0 }}>
                             <MotionButton
                                 fontSize={'md'}

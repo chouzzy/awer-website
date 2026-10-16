@@ -100,6 +100,7 @@ src/
 | `/tecnologia/ecommerce` | E-commerce |
 | `/tecnologia/landing-pages` | Landing pages |
 | `/consultoria` | Consultoria |
+| `/escala-6x1` | Planejador de Escalas (fim da 6x1): vídeo, copy e formulário de lead. `/planfim6-1` redireciona para cá (`next.config.ts`) |
 | `/games` | Awer Games: vitrine dos jogos (dados em `src/data/games.ts`, links externos) |
 | `/help` | Sistema de suporte (client-side filtering) |
 | `/help/[id]` | Detalhe do ticket |
@@ -137,6 +138,10 @@ src/
 
 **`users`** — Usuários Auth0 sincronizados
 - Upsert via `getOrCreateMongoUser()` em `src/actions/users.ts`
+
+**`leads_escala_6x1`** — Leads da página `/escala-6x1`
+- Gravados pela server action `createLeadEscala6x1()` em `src/actions/leads.ts` (zod + campo isca anti-robô)
+- Campos: nome, empresa, whatsapp (só dígitos), email, funcionarios, segmento, origem, status (`novo`), userAgent, referer, createdAt
 
 **`tickets`** — Tickets de suporte
 ```ts
@@ -292,6 +297,8 @@ Utilitário centralizado em `src/lib/analytics.ts` — função `trackEvent({ ev
 | `ticket_create` | Criação de chamado de suporte (`CreateTicketForm.tsx`) |
 | `ticket_message_send` | Envio de mensagem num chamado (`ClientTicketDetail.tsx`) |
 | `game_click` | Botão "Jogar agora" em `/games` (param `game` = slug) |
+| `video_play` | Play no vídeo do Planejador em `/escala-6x1` |
+| `contact_form_submit` (`source: escala_6x1`) | Lead enviado em `/escala-6x1` |
 
 Para adicionar novo evento: chamar `trackEvent({ event: 'nome_evento', ...parametros })` no componente.
 
@@ -351,6 +358,10 @@ Todas seguem o mesmo padrão visual: dark theme, `brand.500` como accent, anima�
 
 ---
 
+## Mídia
+
+- Vídeos ficam em `public/` comprimidos (720p, H.264, faststart). O repositório é público e o GitHub recusa arquivos acima de 100 MB: comprimir antes de commitar.
+
 ## TODOs em Aberto
 
 | Arquivo | Linha | Descrição |
@@ -369,6 +380,7 @@ Todo o conteúdo do site está em `src/data/`:
 - `gestao.ts` — soluções de gestão
 - `clientLogos.ts` — logos dos clientes
 - `games.ts` — jogos exibidos em `/games` (título, link, print e cores)
+- `escala6x1.ts` — textos, linha do tempo legal e opções do formulário de `/escala-6x1` (revisar quando a Emenda for promulgada)
 - `footer.ts`, `header.ts` — estrutura de navegação
 
 Edite esses arquivos para atualizar o conteúdo sem mexer nos componentes.

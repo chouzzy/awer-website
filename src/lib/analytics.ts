@@ -15,7 +15,8 @@ export type TrackEventName =
   | 'contact_form_submit'
   | 'login_click'
   | 'nav_click'
-  | 'game_click';
+  | 'game_click'
+  | 'video_play';
 
 interface TrackParams {
   event: TrackEventName;

@@ -20,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/tecnologia/landing-pages`,           priority: 0.85, changeFrequency: "monthly",  lastModified: new Date() },
 
     // ── Gestão / Consultoria ──────────────────────────────────────────
+    { url: `${base}/escala-6x1`,                         priority: 0.85, changeFrequency: "weekly",   lastModified: new Date() },
     { url: `${base}/gestao/gestao-estrategia`,           priority: 0.8,  changeFrequency: "monthly",  lastModified: new Date() },
     { url: `${base}/gestao/comercial-vendas`,            priority: 0.8,  changeFrequency: "monthly",  lastModified: new Date() },
     { url: `${base}/gestao/prospeccao`,                  priority: 0.8,  changeFrequency: "monthly",  lastModified: new Date() },

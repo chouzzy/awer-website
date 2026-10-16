@@ -44,6 +44,15 @@ const pageData: GestaoPageData = {
             description: "Defina Preços e Margens de Lucro de Forma Estratégica, Garantindo que Seu Negócio Seja Rentável. Valorize Seus Seus Produtos e Otimize Seus Ganhos.",
             image: "/gestao/compras.jpg",
             orientation: "image-left"
+        },
+        {
+            tagLabel: 'Escala 6x1', // Categoria
+            tagLabelColor: 'brand.600', // Categoria
+            link: '/escala-6x1', // página própria em vez do WhatsApp
+            product: "Planejador de Escalas: Fim da 6x1",
+            description: "Descubra Quantas Pessoas a Mais Sua Operação Vai Precisar com a Nova Jornada, Quanto Isso Custa e Qual o Melhor Caminho Para Reorganizar as Escalas Sem Comprometer o Resultado do Negócio.",
+            image: "/gestao/planejador-escalas-6x1.jpg",
+            orientation: "image-right"
         }
     ]
 };
